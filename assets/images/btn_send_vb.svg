@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="170" viewBox="0 0 400 170">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke: #000;
+        filter: url(#filter);
+        fill: #090;
+        font-family: "Whimsy TT";
+      }
+
+      .cls-1, .cls-2 {
+        stroke-linejoin: round;
+        stroke-width: 1px;
+        font-size: 164.931px;
+      }
+
+      .cls-2 {
+        stroke: #090;
+        filter: url(#filter-2);
+        font-family: Marathon;
+      }
+    </style>
+    <filter id="filter" x="26" y="8" width="114" height="145" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dx="6.428" dy="7.66" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="3.162"/>
+      <feFlood result="flood" flood-opacity="0.98"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+    <filter id="filter-2" x="133" y="54" width="226" height="94" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dx="6.428" dy="7.66" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="3.162"/>
+      <feFlood result="flood" flood-opacity="0.98"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feOffset result="offset-2" dx="6.428" dy="7.66" in="SourceAlpha"/>
+      <feGaussianBlur result="blur-2" stdDeviation="3.162"/>
+      <feFlood result="flood-2" flood-opacity="0.25"/>
+      <feComposite result="composite-2" operator="in" in2="blur-2"/>
+      <feBlend result="blend" mode="multiply" in2="composite"/>
+      <feBlend result="blend-2" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <image id="Calque_1" data-name="Calque 1" x="35" y="17" width="365" height="141" xlink:href="data:img/png;base64,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"/>
+  <g style="fill: #090; filter: url(#filter)">
+    <text id="S" class="cls-1" x="47.5" y="141" style="stroke: inherit; filter: none; fill: inherit">S</text>
+  </g>
+  <use xlink:href="#S" style="stroke: #000; filter: none; fill: none"/>
+  <g style="fill: ; filter: url(#filter-2)">
+    <text id="ent" class="cls-2" x="153.5" y="134" style="stroke: inherit; filter: none; fill: inherit">ent</text>
+  </g>
+  <use xlink:href="#ent" style="stroke: #090; filter: none; fill: none"/>
+</svg>

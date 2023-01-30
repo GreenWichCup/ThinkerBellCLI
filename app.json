@@ -1,0 +1,27 @@
+{
+  "name": "ThinkerBell",
+  "slug": "ThinkerBell",
+  "version": "0.0.1",
+  "orientation": "portrait",
+  "icon": "./assets/images/LOGO_VB.png",
+  "splash": {
+    "image": "./assets/images/LOGO-enter.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "assetBundlePatterns": ["**/*"],
+  "ios": {
+    "supportsTablet": true,
+    "bundleIdentifier": "com.greenwichcup.ThinkerBell"
+  },
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/images/LOGO_VB.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "package": "com.greenwichcup.ThinkerBell"
+  }
+}
