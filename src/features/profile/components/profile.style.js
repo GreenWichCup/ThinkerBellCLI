@@ -6,6 +6,7 @@ import { List, Avatar, TextInput } from "react-native-paper";
 import { colors } from "../../../infrastructure/theme/colors";
 
 export const ProductList = styled(FlatList).attrs({})``;
+export const ProfilePhotoCard = styled(Avatar.Image).attrs({})``;
 
 export const ProductMainContainer = styled.View`
   padding-left: ${(props) => props.theme.space[0]};

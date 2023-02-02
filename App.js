@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { Alert, StatusBar, StyleSheet } from 'react-native';
 import messaging from "@react-native-firebase/messaging";
 import auth from "@react-native-firebase/auth";
@@ -7,18 +8,12 @@ import { theme } from './src/infrastructure/theme';
 import { Navigation } from "./src/infrastructure/navigation";
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
-import { NotifService } from './src/services/notifications/notifications.service';
-//import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import PushNotification from 'react-native-push-notification';
-
-
+import { notificationListener } from './src/services/notifications/notifications.service';
+import SplashScreen from 'react-native-splash-screen';
 const App = () => {
-
   useEffect(() => {
-    messaging().onMessage(async remoteMessage => {
-      console.log("some messsage :", remoteMessage)
-    });
-
+    SplashScreen.hide();
+    notificationListener();
   }, []);
 
   return (

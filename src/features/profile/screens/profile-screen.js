@@ -36,6 +36,7 @@ import {
   Amount,
   IconThink,
   ProductList,
+  ProfilePhotoCard
 } from "../components/profile.style";
 import { set } from "immer/dist/internal";
 
@@ -65,7 +66,7 @@ const profileMenu = [
     image: require("../../../../assets/images/ic_profile_settings.png"),
   },
 ];
-9
+
 export const ProfileScreen = ({ route, navigation }) => {
   const userAuthState = useSelector(userStateValue);
   const dispatch = useDispatch();
@@ -102,8 +103,8 @@ export const ProfileScreen = ({ route, navigation }) => {
       );
       if (photoUri) {
         setProfilePhoto(photoUri);
-        console.log("uri path value: ", photoUri);
-        console.log("uri storgage key : ", userAuthState.currentUser.userId);
+        console.log("value photo ", photoUri);
+        console.log("storage key : ", userAuthState.currentUser.userId);
       } else {
         setProfilePhoto(defaultPhoto);
       }
@@ -130,29 +131,20 @@ export const ProfileScreen = ({ route, navigation }) => {
           <Spacer position="top" size="large" />
           {profilePhoto === null ? (
             <View
-              style={{
-                backgroundColor: "green",
-                borderRadius: 50,
-                paddingLeft: 8,
-                paddingRight: 8,
-                paddingTop: 8,
-                paddingBottom: 8,
-                alignSelf: "center",
-              }}
+              style={styles.profilePhoto}
             >
               <Bell_Solo2 width={84} height={84} />
-
             </View>
           ) : (
             <Avatar.Image
               size={80}
-              source={{ uri: profilePhoto }}
-              backgroundColor={colors.bg.secondary}
+              source={{ uri: `file://${profilePhoto}` }}
+              style={{ alignSelf: "center" }}
             />
           )}
 
           <Spacer position="top" size="small" />
-          <Text variant="label">{userAuthState.currentUser.userName}</Text>
+          <Text style={styles.userName} variant="label">{userAuthState.currentUser.userName}</Text>
           <Spacer position="top" size="medium" />
         </View>
         <ProfileInfo>
@@ -273,4 +265,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
   },
+  userName: {
+    alignSelf: "center",
+  },
+  profilePhoto: {
+    backgroundColor: "green",
+    borderRadius: 50,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    alignSelf: "center",
+  }
 });

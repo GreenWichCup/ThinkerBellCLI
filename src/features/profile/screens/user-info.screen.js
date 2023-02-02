@@ -16,6 +16,7 @@ import { Spacer } from "../../../components/spacer/spacer-component";
 import { SafeArea } from "../../../components/utility/safe-area-component";
 
 import { AvatarContainer } from "../components/profile.style";
+import Bell_Solo2 from "../../../../assets/images/Bell_solo2.svg";
 
 import {
   userStateChange,
@@ -59,16 +60,16 @@ export const UserInfoScreen = ({ route, navigation }) => {
         <Spacer position="top" size="large" />
         <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
           {profilePhoto === null ? (
-            <Avatar.Icon
-              size={80}
-              icon="account"
-              backgroundColor={colors.bg.sixth}
-            />
+            <View
+              style={styles.profilePhoto}
+            >
+              <Bell_Solo2 width={84} height={84} />
+            </View>
           ) : (
             <Avatar.Image
               size={80}
-              source={{ uri: profilePhoto }}
-              backgroundColor={colors.bg.secondary}
+              source={{ uri: `file://${profilePhoto}` }}
+              style={{ alignSelf: "center" }}
             />
           )}
         </TouchableOpacity>
@@ -122,4 +123,16 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "90%",
   },
+  userName: {
+    alignSelf: "center",
+  },
+  profilePhoto: {
+    backgroundColor: "green",
+    borderRadius: 50,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    alignSelf: "center",
+  }
 });

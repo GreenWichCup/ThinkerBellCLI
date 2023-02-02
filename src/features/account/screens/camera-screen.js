@@ -43,7 +43,7 @@ export const CameraScreen = ({ navigation }) => {
           .then((result) =>
             console.log(result));
         console.log(photo);
-        //navigation.navigate('UserInfoScreen');
+        navigation.navigate('UserInfoScreen');
       } catch (error) {
         console.log('Data not stored', error);
       }

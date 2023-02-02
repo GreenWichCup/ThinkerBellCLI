@@ -36,20 +36,30 @@ export const CameraScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(false);
   const [camId, setCamId] = useState(null);
   const cameraRef = useRef(Camera);
-  // const dispatch = useDispatch();
-  const userAuthState = useSelector(userStateValue);
-  console.log('Data user dispatch before', userAuthState.currentUser);
+  const dispatch = useDispatch();
+  const userDataState = useSelector(userStateValue);
+  console.log('Data user dispatch before', userDataState.currentUser);
   const devices = useCameraDevices('wide-angle-camera');
   const device = devices.front;
 
   const snap = async () => {
     if (cameraRef) {
-      console.log('before key was : ', userAuthState.currentUser.userPhoto);
+      console.log('before photo was : ', userDataState.currentUser.userPhoto);
       try {
-        const photo = await cameraRef.current.takePhoto()
-          .then((result) =>
-            console.log(result));
-        console.log(photo);
+        await cameraRef.current.takePhoto()
+          .then((result) => {
+            console.log("snap photo: ", result.path);
+            AsyncStorage.setItem(userDataState.currentUser.userId, result.path);
+            dispatch(userStateChange({
+              userId: userDataState.currentUser.userId,
+              userName: userDataState.currentUser.userName,
+              userPhoto: result.path,
+              userEmail: userDataState.currentUser.userEmail,
+              token: userDataState.currentUser.token,
+            }))
+          });
+
+
         //navigation.navigate('UserInfoScreen');
       } catch (error) {
         console.log('Data not stored', error);

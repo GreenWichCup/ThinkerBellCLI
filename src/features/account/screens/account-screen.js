@@ -7,7 +7,7 @@ import {
   AccountCover,
   LogoContainer,
 } from "../components/account-styles";
-import { Logo } from "../../../../assets/images/LOGO_300.svg";
+import Logo from "../../../../assets/images/LOGO_300.svg";
 import { Spacer } from "../../../components/spacer/spacer-component";
 import { ScreenOsVariant } from "./ScreenOsVariant";
 
@@ -16,7 +16,7 @@ export const AccountScreen = ({ route, navigation }) => {
     <ScreenOsVariant>
       <AccountContainer>
         <View style={{ alignSelf: "center", marginBottom: 24 }}>
-
+          <Logo width={128} height={128} />
         </View>
         <AuthButton
           icon="account-arrow-right"

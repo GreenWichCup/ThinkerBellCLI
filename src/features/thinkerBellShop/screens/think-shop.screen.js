@@ -30,26 +30,14 @@ import { CartContext } from "../../../services/cart/cart-context";
 
 const ProductItem = ({ ...props }) => {
   return (
-    <TouchableOpacity
-      style={{
-        width: "100%",
-      }}
-      onPress={() => {
-        console.log("product data click", props.index);
-        props.navigation.navigate("ThinkShopDetail", {
-          thinkShop: props.index,
-        });
-      }}
-    >
-      <Spacer position="bottom" size="large">
-        <FadeInView>
-          <ThinkShopInfoCard
-            navigation={props.navigation}
-            thinkShop={props.index}
-          />
-        </FadeInView>
-      </Spacer>
-    </TouchableOpacity>
+    <Spacer position="bottom" size="large">
+      <FadeInView>
+        <ThinkShopInfoCard
+          navigation={props.navigation}
+          thinkShop={props.index}
+        />
+      </FadeInView>
+    </Spacer>
   );
 };
 
@@ -225,24 +213,3 @@ export const ThinkShopScreen = ({ navigation }) => {
     </SafeArea>
   );
 };
-/* <ThinkShopList
-        data={thinkShopFinal}
-=        renderItem={({ item, index }) => {
-          return (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("ThinkShopDetail", {
-                  thinkShop: item,
-                })
-              }
-            >
-              <Spacer position="bottom" size="large">
-                <FadeInView>
-                  <ThinkShopInfoCard navigation={navigation} thinkShop={item} />
-                </FadeInView>
-              </Spacer>
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item) => item.name}
-      />*/

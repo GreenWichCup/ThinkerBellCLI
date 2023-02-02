@@ -24,12 +24,10 @@ import {
   Loading,
 } from "./contact-components.styles";
 import { List } from "./contact-components.styles";
-import NotifService, {
-  getContactFcmToken,
+import {
   requestNotificationsPermission,
 } from "../../../services/notifications/notifications.service";
 
-const notif = new NotifService();
 
 export const ContactList = () => {
   const notifIcon = require("../../../../assets/images/send_btn.png");
@@ -76,32 +74,45 @@ export const ContactList = () => {
       />
     );
   };
-  // var admin = require("firebase-admin");
 
-  const handleSendNotification = async () => {
-    const tok = "fKNOvR8nThi2SPzqTyy9pB:APA91bFNMBpuIEIJ8zE_eHwg9UVsvzhUshzYKWi2XMwIrXySeIUPZg4-4GbSiJChBJPYQ8o1elBBLVSInGQSR4vJX3hM4sZdhs4GNsxvYgvSOrIpvIl-ZqClI67b1LuPkdiO8xO9BfEQ"
-    const message = {
-      token: tok,
-      data: {
-        name: "ddda"
-      },
+  const handleSendNotification = () => {
+    requestNotificationsPermission()
+
+  }
+  const sendSingleDeviceNotification = () => {
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append(
+      'Authorization',
+      'Bearer AAAAZlqUaak:APA91bFV4p94jvFVLBLMALFqBEoT5ppxCq3QEU4lKycbnhyM55nJqQWclcHxgFcm0G1ixzbeSfiCW6e6F7MIi4kj6HSWaaqPAwoZeRsN7NoRC7fABIhulVLjchd2pjHy3emJzRyp0GAZ',
+    );
+    var raw = JSON.stringify({
+      to: 'ftr8FD7WShCTxGMQ9VP_TM:APA91bHOM_X2mhDFm6qbCz4io27EMbCjRJFIvGqOtAAul5wEcmOlv4gfoO1mnhmQ7xKz55Oisbm6qOM6VwnyEbqrxEfdHsTdOI2V80BBEXM8XAKSRra6Noc-bUDi54b3WJs82TQrw9ux',
       notification: {
-        title: "TITLE",
-        body: "MY MESSAGE",
+        title: 'Some title',
+        body: 'Some body',
+        sound: 'bell_1.wav',
+        android_channel_id: 'notification_channel',
       },
+      data: {
+        field1: 'value1',
+        field2: 'value2',
+      },
+      content_available: true,
       priority: 'high',
+    });
 
-    }
-    messaging().sendMessage(message)
-      .then((response) => {
-        // The message was successfully sent
-        console.log('Successfully sent message:', response);
-      })
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
 
-      .catch((error) => {
-        // There was an error sending the message
-        console.error('Error sending message:', error);
-      });
+    fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
+      .then(response => console.log('response :', response.text()))
+      .then(result => console.log('result :', result))
+      .catch(error => console.log('error', error));
   };
 
   useEffect(() => {

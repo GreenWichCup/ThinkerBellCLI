@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ActivityIndicator, Colors } from "react-native-paper";
 import { login } from "../../../redux/actions/auth";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import {
   AccountContainer,
   AuthButton,
@@ -22,11 +22,17 @@ export const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3200);
-    dispatch(login(email, password));
+    if (email !== "" && password !== "") {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3200);
+      dispatch(login(email, password));
+    } else {
+      Alert.alert('Login', 'Email and password are invalid', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    }
   };
 
   return (

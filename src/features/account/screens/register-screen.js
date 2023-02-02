@@ -4,9 +4,7 @@ import { Alert, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import messaging from "@react-native-firebase/messaging";
 import auth from "@react-native-firebase/auth";
-import NotifService, {
-  getFcmToken,
-} from "../../../services/notifications/notifications.service";
+import { getFcmToken } from "../../../services/notifications/notifications.service";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -26,6 +24,7 @@ import {
   ErrorContainer,
   AvatarContainer,
 } from "../components/account-styles";
+import Logo from "../../../../assets/images/LOGO_300.svg";
 import { colors } from "../../../infrastructure/theme/colors";
 import { ScreenOsVariant } from "./ScreenOsVariant";
 import { Spacer } from "../../../components/spacer/spacer-component";
@@ -120,25 +119,9 @@ export const RegisterScreen = ({ route, navigation }) => {
     <ScreenOsVariant>
       <AccountContainer>
         <AvatarContainer>
-          <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
-            {userPhoto !== null ? (
-              <Avatar.Image
-                size={80}
-                source={{ uri: userPhoto }}
-                backgroundColor={colors.brand.primary}
-                style={{ alignSelf: "center" }}
-              />
-            ) : (
-              <Avatar.Image
-                size={80}
-                source={{ uri: profilePhoto }}
-                backgroundColor={colors.brand.primary}
-              />
-            )}
-            <Text variant="label">Change photo</Text>
-          </TouchableOpacity>
-          <Spacer position="top" size="small" />
+          <Logo width={128} height={128} />
         </AvatarContainer>
+        <Spacer position="top" size="small" />
         <AuthInput
           label="Username"
           value={userName}

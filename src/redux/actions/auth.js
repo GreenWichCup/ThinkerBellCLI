@@ -25,14 +25,10 @@ export const register = (email, password) => (dispatch) =>
         reject();
       });
   });
-export const updateUser = (id, data) => (dispatch) =>
+export const updateUser = (id, uri) => (dispatch) =>
   new Promise((resolve, reject) => {
-    firestore().collection("users").doc(id).set({
-      userName: name,
-      userEmail: email,
-      userId: id,
-      userPhoto: photo,
-      token: firestore.FieldValue.arrayUnion(notificationToken),
+    firestore().collection("users").doc(id).update({
+      userPhoto: uri,
     })
       .then(() => {
         resolve();
