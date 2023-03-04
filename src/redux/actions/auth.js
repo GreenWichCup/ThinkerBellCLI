@@ -21,10 +21,12 @@ export const register = (email, password) => (dispatch) =>
       .then(() => {
         resolve();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log("error", e)
         reject();
       });
   });
+
 export const updateUser = (id, uri) => (dispatch) =>
   new Promise((resolve, reject) => {
     firestore().collection("users").doc(id).update({
@@ -33,8 +35,9 @@ export const updateUser = (id, uri) => (dispatch) =>
       .then(() => {
         resolve();
       })
-      .catch(() => {
+      .catch((e) => {
         reject();
+        console.log("error")
       });
   });
 
@@ -42,14 +45,14 @@ export const saveUserToDb = async (
   id,
   email,
   name,
-  photo,
+  phone,
   notificationToken
 ) => {
   const userObj = {
     userName: name,
     userEmail: email,
     userId: id,
-    userPhoto: photo,
+    userPhone: phone,
     token: firestore.FieldValue.arrayUnion(notificationToken),
   };
   try {
@@ -57,7 +60,7 @@ export const saveUserToDb = async (
       userName: name,
       userEmail: email,
       userId: id,
-      userPhoto: photo,
+      userPhone: phone,
       token: firestore.FieldValue.arrayUnion(notificationToken),
     });
   } catch (error) {
@@ -65,3 +68,4 @@ export const saveUserToDb = async (
   }
   return userObj;
 };
+

@@ -12,7 +12,6 @@ const FavouriteButton = styled(TouchableOpacity)``;
 export const Favourite = ({ contact }) => {
   const { favourites, addToFavourites, removeFromFavourites } =
     useContext(FavouritesContext);
-
   const isFavourite = favourites.find((r) => r.recordID === contact.recordID);
   return (
     <FavouriteButton

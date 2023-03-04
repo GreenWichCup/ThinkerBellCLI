@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useMemo } from "react";
+import React, { useCallback, useState, useEffect, useMemo, useContext } from "react";
 import messaging from "@react-native-firebase/messaging";
 import { Searchbar, Colors, Text } from "react-native-paper";
 import { View } from "react-native";
@@ -15,21 +15,25 @@ import {
   getContactsError,
   fetchContacts,
 } from "../../../redux/store/slices/contactListSlice";
+import {
+  requestNotificationsPermission,
+} from "../../../services/notifications/notifications.service";
 
-import { Spacer } from "../../../components/spacer/spacer-component";
 import { ContactCardItem } from "./contactCard.component";
 import {
   SearchContainer,
   LoadingContainer,
   Loading,
+  Separator
 } from "./contact-components.styles";
 import { List } from "./contact-components.styles";
-import {
-  requestNotificationsPermission,
-} from "../../../services/notifications/notifications.service";
+import PushNotification from 'react-native-push-notification';
 
+import { FavouriteBar } from "../../../components/favourites/favourite-bar-component";
+import { FavouritesContext } from "../../../services/favourites/favourites-context";
+import { Spacer } from "../../../components/spacer/spacer-component";
 
-export const ContactList = () => {
+export const ContactList = ({ navigation }) => {
   const notifIcon = require("../../../../assets/images/send_btn.png");
   const dispatch = useDispatch();
   const userVal = useSelector(userStateValue);
@@ -37,8 +41,10 @@ export const ContactList = () => {
   const contactsStatus = useSelector(getContactsStatus);
   const userProductStatus = useSelector(getUserProductListStatus);
   const error = useSelector(getContactsError);
+
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isToggled, setIsToggled] = useState(false);
+  const { favourites } = useContext(FavouritesContext);
 
   const filteredContact = useMemo(() => {
     return Array.from(
@@ -49,37 +55,32 @@ export const ContactList = () => {
       )
     );
   }, [searchKeyword, contacts]);
-
   const contactsCallback = useCallback(() => {
     if (contactsStatus === "idle") {
       dispatch(fetchContacts());
     }
   }, [dispatch, contactsStatus]);
-
   const userProductCallback = useCallback(() => {
     if (userProductStatus === "idle") {
       dispatch(fetchUserProductList());
     }
   }, [dispatch, userProductStatus]);
-
   const renderItems = ({ item, index }) => {
     return (
       <ContactCardItem
         key={item.recordID}
         contactInfo={item}
-        sendNotification={handleSendNotification}
+        sendNotification={sendSingleDeviceNotification}
         onPress={() => {
           console.log(item)
         }}
       />
     );
   };
-
   const handleSendNotification = () => {
     requestNotificationsPermission()
-
   }
-  const sendSingleDeviceNotification = () => {
+  const sendSingleDeviceNotification = async (channel_id, sound) => {
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append(
@@ -87,7 +88,7 @@ export const ContactList = () => {
       'Bearer AAAAZlqUaak:APA91bFV4p94jvFVLBLMALFqBEoT5ppxCq3QEU4lKycbnhyM55nJqQWclcHxgFcm0G1ixzbeSfiCW6e6F7MIi4kj6HSWaaqPAwoZeRsN7NoRC7fABIhulVLjchd2pjHy3emJzRyp0GAZ',
     );
     var raw = JSON.stringify({
-      to: 'ftr8FD7WShCTxGMQ9VP_TM:APA91bHOM_X2mhDFm6qbCz4io27EMbCjRJFIvGqOtAAul5wEcmOlv4gfoO1mnhmQ7xKz55Oisbm6qOM6VwnyEbqrxEfdHsTdOI2V80BBEXM8XAKSRra6Noc-bUDi54b3WJs82TQrw9ux',
+      to: "fKQ1QKq4RHiRzHZJtv-ltn:APA91bFyvKLFblumH2HA3e1ZHBnFj6xcv_CltMAsjLfRRNVF-aGb0LepcGLwklFs5bUY2FWjFgmgH3bYOd9xkDRzfaYSbIJP-pBnEZggARFP2CPRz2mQQAarN45ZPwhs3Uux0inD8OKu",
       notification: {
         title: 'Some title',
         body: 'Some body',
@@ -108,20 +109,38 @@ export const ContactList = () => {
       body: raw,
       redirect: 'follow',
     };
-
-    fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
+    //contact Id or token as channel Id, 
+    await notificationChannel('009');
+    await fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
       .then(response => console.log('response :', response.text()))
       .then(result => console.log('result :', result))
       .catch(error => console.log('error', error));
   };
 
+  const notificationChannel = async (channelId, soundName, imgUrl) => {
+    await PushNotification.channelExists(channelId, async exists => {
+      console.log(exists); // true/false
+      if (!exists) {
+        await PushNotification.createChannel(
+          {
+            channelId: channelId, // (required)
+            channelName: channelId, // (required)
+            soundName: soundName,
+          },
+          created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+        );
+      }
+    });
+  }
+
   useEffect(() => {
     contactsCallback();
-    userProductCallback();
-  }, [contactsCallback, userProductCallback]);
+    // userProductCallback();
+  }, [contactsCallback]);
+
 
   return (
-    <>
+    <View style={{ flex: 1 }} >
       <SearchContainer>
         <Searchbar
           placeholder="Search contact..."
@@ -129,15 +148,20 @@ export const ContactList = () => {
           icon={isToggled ? "heart" : "heart-outline"}
           onIconPress={() => {
             setIsToggled(!isToggled);
-            console.log("listName : / ", filteredContact);
+            console.log("favourites list: ", favourites);
           }}
           onChangeText={(text) => {
             setSearchKeyword(text);
           }}
         />
       </SearchContainer>
-      <Spacer size="medium" position="top" />
-
+      {isToggled && (
+        <FavouriteBar
+          favourites={favourites}
+        />
+      )}
+      <Separator />
+      <Spacer size="large" />
       {contactsStatus === "loading" && (
         <LoadingContainer>
           <Loading size={50} animating={true} color={Colors.red300} />
@@ -157,6 +181,6 @@ export const ContactList = () => {
           <Text>ERROR IS {error}</Text>
         </View>
       )}
-    </>
+    </View>
   );
 };

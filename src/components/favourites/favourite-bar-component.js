@@ -5,9 +5,10 @@ import { Spacer } from "../spacer/spacer-component";
 import { CompactThinkShopInfo } from "../thinkShop/compact-thinkShop-info";
 import { Text } from "../typography/text-component";
 
-const FavouriteWrapper = styled.View`
-  padding: 10px;
+const FavouriteWrapper = styled.View` 
 `;
+const Title = styled(Text)`
+align-self:center;`;
 
 export const FavouriteBar = ({ favourites, onNavigate }) => {
   if (!favourites.length) {
@@ -15,23 +16,19 @@ export const FavouriteBar = ({ favourites, onNavigate }) => {
   }
   return (
     <FavouriteWrapper>
-      <Spacer variant="left.large">
-        <Text variant="caption"> Favourites</Text>
-      </Spacer>
+      <Title variant="title" >Favourites</Title>
+      <Spacer />
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {favourites.map((thinkShop) => {
-          const key = thinkShop.name.split(" ").join("");
+        {favourites.map((contactInfo) => {
+          const key = contactInfo.displayName.split(" ").join("");
           return (
             <Spacer key={key} position="left" size="medium">
-              <TouchableOpacity
-                onPress={() => onNavigate("ThinkShopDetail", { thinkShop })}
-              >
-                <CompactThinkShopInfo thinkShop={thinkShop} />
-              </TouchableOpacity>
+              <CompactThinkShopInfo contactInfo={contactInfo} />
             </Spacer>
           );
         })}
       </ScrollView>
+      <Spacer size="medium" />
     </FavouriteWrapper>
   );
 };

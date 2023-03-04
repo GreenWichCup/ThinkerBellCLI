@@ -8,22 +8,23 @@ import {
 } from "../../../redux/store/slices/userThinkCounterSlice";
 import { ScrollView } from "react-native-virtualized-view";
 
+
 import { CartContext } from "../../../services/cart/cart-context";
 
 import { SafeArea } from "../../../components/utility/safe-area-component";
 import { CartList } from "../components/checkout-styles";
 import { Text } from "../../../components/typography/text-component";
-import { CreditCardInputForm } from "../components/credit-card-component";
 import {
+  NameInput,
   CartIconContainer,
   CartIcon,
-  NameInput,
   PayButton,
   ClearButton,
 } from "../components/checkout-styles";
 import { Spacer } from "../../../components/spacer/spacer-component";
 import { ProductCartComponent } from "../components/product-card.component";
 import { saveProductToDb } from "../../../redux/actions/productList";
+import { CreditCardComponent } from "../components/payment.component";
 
 export const CheckoutScreen = ({ navigation }) => {
   const { cart, thinkShop, removeItem, sum, clearCart } =
@@ -87,11 +88,11 @@ export const CheckoutScreen = ({ navigation }) => {
               props.i;
             }}
           />
-          <Text>Total: {sum / 100}</Text>
+          <Text>Total: {`${sum / 100} CAD`}</Text>
         </Spacer>
-        <NameInput label="Name" value={name} onChangeText={(t) => setName(t)} />
-        {name.length > 0 && <CreditCardInputForm name={name} />}
+
         <Spacer position="top" size="large" />
+        <CreditCardComponent />
         <PayButton
           icon="currency-usd"
           mode="contained"

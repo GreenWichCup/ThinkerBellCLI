@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import {
   createStackNavigator,
-  TransitionPresets,
+  TransitionPresets
 } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import { IconButton, Colors, Badge } from "react-native-paper";
@@ -11,12 +12,13 @@ import { CheckoutScreen } from "../../features/checkout/screens/checkout.screen"
 import { ThinkShopScreen } from "../../features/thinkerBellShop/screens/think-shop.screen";
 import { ThinkShopDetailScreen } from "../../features/thinkerBellShop/screens/think-shop-detail.screen";
 import { CartContext } from "../../services/cart/cart-context";
+import { colors } from "../theme/colors";
 
 const ShopStack = createStackNavigator();
 
 export const ShopNavigator = ({ navigation }) => {
   const { cart } = useContext(CartContext);
-
+  const goCart = () => { navigation.navigate("CheckoutScreen") };
   return (
     <ShopStack.Navigator
       screenOptions={{ ...TransitionPresets.ModalPresentationIOS }}
@@ -35,13 +37,12 @@ export const ShopNavigator = ({ navigation }) => {
                 )}
                 color={Colors.red500}
                 size={20}
-                onPress={() => navigation.navigate("CheckoutScreen")}
+                onPress={goCart}
               />
               <Badge
                 visible={true}
                 size={16}
-                style={{ top: 4, position: "absolute" }}
-              >
+                style={{ top: 4, position: "absolute", backgroundColor: colors.icon.tertiary }}>
                 {cart.length}
               </Badge>
             </View>

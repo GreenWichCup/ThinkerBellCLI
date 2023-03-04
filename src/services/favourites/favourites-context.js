@@ -44,6 +44,7 @@ export const FavouritesContextProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       loadFavourites(user.userId);
+      console.log(favourites);
     }
   }, [user]);
 

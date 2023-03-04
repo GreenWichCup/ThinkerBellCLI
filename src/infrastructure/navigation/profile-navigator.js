@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { IconButton, Colors } from "react-native-paper";
 import EntypoIcon from "react-native-vector-icons/Entypo";
+import firestore from "@react-native-firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createStackNavigator,
@@ -25,7 +26,7 @@ const ProfileStack = createStackNavigator();
 
 export const ProfileNavigator = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const userData = useSelector(userStateValue);
+  const userDataState = useSelector(userStateValue);
   const handleLogout = async () => {
     auth()
       .signOut()
@@ -41,30 +42,44 @@ export const ProfileNavigator = ({ route, navigation }) => {
       })
       .catch((e) => console.log(e));
   };
-
+  const saveUserChanges = async () => {
+    try {
+      await firestore().collection("users").doc(userDataState.currentUser.userId).update({
+        userName: userDataState.currentUser.userName,
+        userEmail: userDataState.currentUser.userEmail,
+        userPhone: userDataState.currentUser.userPhone,
+      });
+      console.log("userDataState", userDataState);
+    } catch (error) {
+      console.log("error write db data:", error);
+    }
+  };
   return (
     <ProfileStack.Navigator
       screenOptions={{
         headerShown: false,
-        /* headerRight: () => (
-           <IconButton
-             icon={() => <Entypo size={20} color="black" name="log-out" />}
-             color={Colors.red500}
-             size={20}
-             onPress={handleLogout}
-           />
-         ),*/
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
       <ProfileStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        initialParams={{ snapUri: userData.currentUser.userPhoto }}
+        initialParams={{ snapUri: userDataState.currentUser.userPhoto }}
       />
       <ProfileStack.Screen name="Favourites" component={FavouritesScreen} />
       <ProfileStack.Screen name="Camera" component={CameraScreen} />
-      <ProfileStack.Screen name="UserInfoScreen" component={UserInfoScreen} />
+      <ProfileStack.Screen name="UserInfoScreen" component={UserInfoScreen} options={{
+        headerShown: true,
+        headerRight: () => (
+          <IconButton
+            icon={() => <EntypoIcon size={20} color="black" name="save" />}
+            color={Colors.red500}
+            size={20}
+            onPress={() => saveUserChanges()}
+          />
+        )
+
+      }} />
       <ProfileStack.Screen
         name="UserProductScreen"
         component={UserProductScreen}
@@ -85,6 +100,6 @@ export const ProfileNavigator = ({ route, navigation }) => {
           ),
         }}
       />
-    </ProfileStack.Navigator>
+    </ProfileStack.Navigator >
   );
 };

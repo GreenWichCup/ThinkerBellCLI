@@ -60,7 +60,7 @@ export const CameraScreen = ({ navigation }) => {
           });
 
 
-        //navigation.navigate('UserInfoScreen');
+        navigation.navigate('UserInfoScreen');
       } catch (error) {
         console.log('Data not stored', error);
       }
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 36,
     right: 20,
     left: 20,
     borderRadius: 20,

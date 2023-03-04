@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { Alert, StatusBar, StyleSheet } from 'react-native';
 import messaging from "@react-native-firebase/messaging";
@@ -8,12 +8,17 @@ import { theme } from './src/infrastructure/theme';
 import { Navigation } from "./src/infrastructure/navigation";
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
-import { notificationListener } from './src/services/notifications/notifications.service';
+import { notificationListener, requestNotificationsPermission } from './src/services/notifications/notifications.service';
 import SplashScreen from 'react-native-splash-screen';
 const App = () => {
+  const [publishableKey, setPublishableKey] = useState('');
+
+
   useEffect(() => {
     SplashScreen.hide();
+    requestNotificationsPermission()
     notificationListener();
+
   }, []);
 
   return (
@@ -47,3 +52,5 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+

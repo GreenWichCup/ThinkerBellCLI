@@ -1,37 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Text } from "../typography/text-component";
-import { Platform } from "react-native";
-import WebView from "react-native-webview";
+import { Platform, Image } from "react-native";
+import RNFS from "react-native-fs";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const isAndroid = Platform.OS === "android";
 
-const CompactWebWiew = styled(WebView)`
-  border-radius: 10px;
-  width: 120px;
-  height: 100px;
-`;
+
 
 const CompactImage = styled.Image`
-  border-radius: 10px;
-  width: 120px;
-  height: 100px;
+  border-radius: 50px ;
+  width: 50px;
+  height: 50px;
 `;
 
 const Item = styled.View`
-  padding: 10px;
   max-width: 120px;
   align-items: center;
 `;
 
-export const CompactThinkShopInfo = ({ thinkShop, isMap }) => {
-  const Image = isAndroid && isMap ? CompactWebWiew : CompactImage;
+export const CompactThinkShopInfo = ({ contactInfo }) => {
+  const [uriValue, setUriValue] = useState(null);
+  const photo = require('../../../assets/images/Bell_solo2.png');
+  const favouritePressed = () => { console.log("favourite card pressed is:", contactInfo) }
+
   return (
     <Item>
-      <Image source={{ uri: thinkShop.photos[0] }} />
-      <Text center variant="caption">
-        {thinkShop.name}
-      </Text>
+      <TouchableWithoutFeedback onPress={favouritePressed}>
+
+        <CompactImage source={contactInfo.thumbnailPath.startsWith("content://") ? { uri: contactInfo.thumbnailPath } : photo} />
+        <Text center variant="caption">
+          {contactInfo.displayName}
+        </Text>
+      </TouchableWithoutFeedback>
+
     </Item>
   );
 };

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert, TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
+import PhoneInput from "react-native-phone-number-input";
 import { useFocusEffect } from "@react-navigation/native";
 import messaging from "@react-native-firebase/messaging";
 import auth from "@react-native-firebase/auth";
@@ -12,76 +13,59 @@ import { ActivityIndicator, Colors, Avatar } from "react-native-paper";
 //import { getAuth } from "firebase/auth";
 import { register, saveUserToDb } from "../../../redux/actions/auth";
 import {
-  userStateValue,
   userStateChange,
   noUser,
 } from "../../../redux/store/slices/authSlice";
 
 import {
   AccountContainer,
-  AuthButton,
+  RegisterBtn,
+  PhoneNumberInput,
   AuthInput,
   ErrorContainer,
   AvatarContainer,
+  BtnContainer
 } from "../components/account-styles";
 import Logo from "../../../../assets/images/LOGO_300.svg";
-import { colors } from "../../../infrastructure/theme/colors";
 import { ScreenOsVariant } from "./ScreenOsVariant";
 import { Spacer } from "../../../components/spacer/spacer-component";
 import { Text } from "../../../components/typography/text-component";
-import { NotificationHandler } from "../../../services/notifications/foregroundHandler";
-import PushNotification from "react-native-push-notification";
 
 export const RegisterScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
+
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
-  const [userPhoto, setUserPhoto] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [userToken, setUserToken] = useState(null);
-  const [photoStorageKey, setPhotoStorageKey] = useState(null);
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const profilePhoto = route.params.snapUri;
-  const user = useSelector(userStateValue);
+  const phoneInput = useRef(null);
+
+
   const getUserToken = async () => {
     const tok = await messaging().getToken();
     const tokString = JSON.stringify(tok)
+    console.log("token in function :", tokString);
     setUserToken(tokString);
+    console.log("token in state ", userToken);
   };
-
-  const getProfilePicture = useCallback(async () => {
-    try {
-      if (profilePhoto !== null) {
-        setPhotoStorageKey(profilePhoto);
-        const photoUri = await AsyncStorage.getItem(profilePhoto);
-        setUserPhoto(photoUri);
-      }
-    } catch (e) {
-      console.log("AsyncStorage :", e);
-    }
-  }, [profilePhoto]);
-
-  useFocusEffect(
-    useCallback(() => {
-      getProfilePicture();
-    }, [getProfilePicture])
-  );
 
   const saveUserCallBack = async () => {
     const { uid } = auth().currentUser;
     if (uid !== null) {
       // get token and save it with Async storage
       await getUserToken();
-      await saveUserToDb(uid, userEmail, userName, profilePhoto, userToken)
+      console.log("token on saveUser function: ", userToken)
+      await saveUserToDb(uid, userEmail, userName, phoneNumber, userToken)
         .then(() => {
           dispatch(
             userStateChange({
               userId: uid,
               userName: userName,
-              userPhoto: photoStorageKey,
+              userPhone: phoneNumber,
               userEmail: userEmail,
               token: JSON.stringify(userToken),
             })
@@ -92,7 +76,7 @@ export const RegisterScreen = ({ route, navigation }) => {
         });
       setIsLoading(false);
     } else {
-      Alert.alert("FAILURE!!!");
+      console.log("FAILURE!!!");
     }
   };
 
@@ -100,8 +84,9 @@ export const RegisterScreen = ({ route, navigation }) => {
     setIsLoading(true);
     const testPassword = password === repeatedPassword;
     const testEmail = /^[a-z0-9.]{1,64}@[a-z0-9.]{1,64}$/i.test(userEmail);
+    const checkValid = phoneInput.current.isValidNumber(phoneNumber);
 
-    if (testPassword && testEmail) {
+    if (testPassword && testEmail && checkValid) {
       setIsLoading(true);
       dispatch(register(userEmail, password));
       setTimeout(async () => {
@@ -112,9 +97,16 @@ export const RegisterScreen = ({ route, navigation }) => {
       dispatch(noUser());
       setError("Error: Passords do not match");
       setIsLoading(false);
+      console.log("phone valid value ", checkValid)
       return;
     }
   };
+
+  useEffect(() => {
+    getUserToken();
+  }, [])
+
+
   return (
     <ScreenOsVariant>
       <AccountContainer>
@@ -128,10 +120,23 @@ export const RegisterScreen = ({ route, navigation }) => {
           textContentType="name"
           keyboardType="default"
           autoCapitalize="none"
+          placeholder="Username"
           onChangeText={(u) => setUserName(u)}
         />
-        <Spacer size="medium" />
+        <Spacer size="small" />
+        <PhoneNumberInput
+          ref={phoneInput}
+          defaultValue={phoneNumber}
+          defaultCode="CA"
+          layout="first"
+          onChangeText={(text) => {
+            setPhoneNumber(text);
+          }}
+          withDarkTheme={false}
+          withShadow
 
+        />
+        <Spacer size="small" />
         <AuthInput
           label="E-mail"
           value={userEmail}
@@ -140,7 +145,7 @@ export const RegisterScreen = ({ route, navigation }) => {
           autoCapitalize="none"
           onChangeText={(u) => setUserEmail(u)}
         />
-        <Spacer size="medium" />
+        <Spacer size="small" />
         <AuthInput
           label="Password"
           value={password}
@@ -149,7 +154,7 @@ export const RegisterScreen = ({ route, navigation }) => {
           autoCapitalize="none"
           onChangeText={(p) => setPassword(p)}
         />
-        <Spacer size="medium" />
+        <Spacer size="small" />
         <AuthInput
           label="Repeat Password"
           value={repeatedPassword}
@@ -163,18 +168,20 @@ export const RegisterScreen = ({ route, navigation }) => {
             <Text variant="error">{error}</Text>
           </ErrorContainer>
         )}
-        <Spacer size="medium" />
+        <Spacer size="small" />
         {!isLoading ? (
-          <AuthButton icon="email" mode="contained" onPress={handleRegister}>
-            Register
-          </AuthButton>
+          <BtnContainer>
+            <RegisterBtn icon="keyboard-return" mode="contained" onPress={() => navigation.goBack()}>
+              Back
+            </RegisterBtn>
+            <RegisterBtn
+              icon="email" mode="contained" onPress={handleRegister}>
+              Sign up
+            </RegisterBtn>
+          </BtnContainer>
         ) : (
           <ActivityIndicator animating={true} color={Colors.red400} />
         )}
-        <Spacer size="medium" />
-        <AuthButton mode="contained" onPress={() => navigation.goBack()}>
-          Back
-        </AuthButton>
       </AccountContainer>
     </ScreenOsVariant>
   );

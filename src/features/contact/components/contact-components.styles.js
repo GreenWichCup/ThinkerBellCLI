@@ -3,6 +3,7 @@ import { Card, Avatar, Button, ActivityIndicator } from "react-native-paper";
 import { FlatList, TouchableOpacity, Image } from "react-native";
 import { Text } from "../../../components/typography/text-component";
 import { colors } from "../../../infrastructure/theme/colors";
+import { Divider } from 'react-native-paper';
 
 export const SearchContainer = styled.View`
   padding: ${(props) => props.theme.space[3]};
@@ -11,6 +12,15 @@ export const SearchContainer = styled.View`
 export const Loading = styled(ActivityIndicator)`
   margin-left: -25px;
 `;
+
+export const Separator = styled(Divider)`
+  margin-left: 25%  ;
+  margin-right: 25%;
+  border-radius: 10px;
+  height: 4px;
+  background-color: ${colors.brand.quaternary}
+`;
+
 export const LoadingContainer = styled.View`
   position: absolute;
   top: 50%;

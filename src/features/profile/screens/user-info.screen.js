@@ -24,11 +24,13 @@ import {
 } from "../../../redux/store/slices/authSlice";
 
 export const UserInfoScreen = ({ route, navigation }) => {
-  const userAuthState = useSelector(userStateValue);
+  const userDataState = useSelector(userStateValue);
   const dispatch = useDispatch();
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const [email, setEmail] = useState(userAuthState.currentUser.userEmail);
-  const [userName, setUserName] = useState(userAuthState.currentUser.userName);
+
+  const [userEmail, setUserEmail] = useState(userDataState.currentUser.userEmail);
+  const [userName, setUserName] = useState(userDataState.currentUser.userName);
+  const [userPhone, setUserPhone] = useState(userDataState.currentUser.userPhone);
 
   //const [editUserInfo, setEditUserInfo] = useState(false);
 
@@ -36,17 +38,19 @@ export const UserInfoScreen = ({ route, navigation }) => {
   const getProfilePicture = useCallback(async () => {
     try {
       const photoUri = await AsyncStorage.getItem(
-        userAuthState.currentUser.userId
+        userDataState.currentUser.userId
       );
       setProfilePhoto(photoUri);
     } catch (error) {
       console.log("AsyncStorage error:", error);
       console.log(
         "user Data for photo edit profile :",
-        userAuthState.currentUser
+        userDataState.currentUser
       );
     }
-  }, [userAuthState.currentUser]);
+  }, [userDataState.currentUser]);
+
+  // create helpers function for firestore data update
 
   useFocusEffect(
     useCallback(() => {
@@ -74,15 +78,16 @@ export const UserInfoScreen = ({ route, navigation }) => {
           )}
         </TouchableOpacity>
         <Spacer position="top" size="large" />
-        <Text variant="label">{userAuthState.currentUser.userName}</Text>
+        <Text variant="label">{userDataState.currentUser.userName}</Text>
         <Spacer position="top" size="large" />
       </AvatarContainer>
       <Spacer position="top" size="large" />
       <TextInput
+        mode="outlined"
         style={styles.text_input}
         left={
           <TextInput.Icon
-            name={() => <FontAwesome5Icon name="user-edit" size={16} />}
+            name={() => <FontAwesome5Icon name="user-edit" size={16} color="black" />}
           />
         }
         value={userName}
@@ -93,7 +98,7 @@ export const UserInfoScreen = ({ route, navigation }) => {
         onEndEditing={() =>
           dispatch(
             userStateChange({
-              ...userAuthState.currentUser,
+              ...userDataState.currentUser,
               userName: userName,
             })
           )
@@ -103,14 +108,45 @@ export const UserInfoScreen = ({ route, navigation }) => {
       />
       <Spacer position="top" size="medium" />
       <TextInput
+        mode="outlined"
         style={styles.text_input}
-        left={<TextInput.Icon name={() => <EntypoIcon name="email" size={16} />} />}
-        value={email}
+        left={<TextInput.Icon name={() => <EntypoIcon name="email" size={16} color="black" />} />}
+        value={userEmail}
         textContentType="emailAddress"
         keyboardType="default"
         autoCapitalize="none"
-        onChangeText={(u) => setEmail(u)}
+        onChangeText={(u) => setUserEmail(u)}
+        onEndEditing={() =>
+          dispatch(
+            userStateChange({
+              ...userDataState.currentUser,
+              userEmail: userEmail,
+            })
+          )
+        }
         label="Email"
+        placeholderTextColor={colors.text.secondary}
+      />
+      <Spacer position="top" size="medium" />
+
+      <TextInput
+        mode="outlined"
+        style={styles.text_input}
+        left={<TextInput.Icon name={() => <FontAwesome5Icon name="phone-alt" size={16} color="black" />} />}
+        value={userPhone}
+        textContentType="telephoneNumber"
+        keyboardType="default"
+        autoCapitalize="none"
+        onChangeText={(u) => setUserPhone(u)}
+        onEndEditing={() =>
+          dispatch(
+            userStateChange({
+              ...userDataState.currentUser,
+              userPhone: userPhone,
+            })
+          )
+        }
+        label="Phone"
         placeholderTextColor={colors.text.secondary}
       />
     </SafeArea>

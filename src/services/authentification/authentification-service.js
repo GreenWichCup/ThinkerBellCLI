@@ -1,6 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
-import PushNotification from "react-native-push-notification";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBztfnDp3gkiltFu87eBsFbJ_7bQJMWObk",

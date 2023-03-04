@@ -24,7 +24,7 @@ export const fetchContacts = createAsyncThunk(
         {
           'title': 'Contacts',
           'message': 'This app would like to view your contacts.',
-          'buttonPositive': 'Please accept bare mortal'
+          'buttonPositive': 'ok'
         }
       )
         ;
@@ -46,13 +46,14 @@ const contactListSlice = createSlice({
         console.log("log addContact payload: ", action.payload);
         state.contactList.push(action.payload);
       },
-      prepare(displayName, recordID, thumbnailPath) {
+      prepare(displayName, recordID, thumbnailPath, hasThumbnail, phoneNumbers) {
         return {
           payload: {
             displayName,
             recordID,
             thumbnailPath,
             hasThumbnail,
+            phoneNumbers
           },
         };
       },
@@ -62,22 +63,27 @@ const contactListSlice = createSlice({
     builder
       .addCase(fetchContacts.pending, (state, action) => {
         state.status = "loading";
-        console.log("recux fetchContact.pending: ", action.payload)
+        console.log("redux fetchContact.pending: ", action.payload)
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        console.log("log fetchContact.fullfilled payload: ", action.payload);
-        const loadedContacts = action.payload.map((c) => {
-          const contactModel = {
-            displayName: c.displayName.length ? c.displayName : "N/A",
-            recordID: c.recordID,
-            thumbnailPath: c.hasThumbnail ? c.thumbnailPath : require("../../../../assets/images/LOGO-enter.png"),
-            hasThumbnail: c.hasThumbnail,
-            defaultRingTone: null,
-          };
-          return contactModel;
-        });
-        state.contactList = state.contactList.concat(loadedContacts);
+        let contactsPhone = [];
+        action.payload.forEach((contact) => {
+          if (contact.phoneNumbers.length > 0) {
+            contactsPhone.push(contact);
+          }
+        })
+        /* const finalContactArray = contactsPhone.map((c) => {
+           const contactModel = {
+             displayName: c.displayName.length ? c.displayName : "N/A",
+             recordID: c.recordID,
+             thumbnailPath: c.hasThumbnail ? c.thumbnailPath : require("../../../../assets/images/LOGO-enter.png"),
+             hasThumbnail: c.hasThumbnail,
+             phoneNumbers: c.phoneNumbers.length ? c.phoneNumbers[0].number : null
+           };
+           return contactModel;
+         });*/
+        state.contactList = state.contactList.concat(contactsPhone);
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.status = "failed";

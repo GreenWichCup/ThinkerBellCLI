@@ -4,8 +4,9 @@ const initialState = {
   currentUser: {
     userId: null,
     userName: null,
-    userPhoto: null,
+    userPhone: null,
     userEmail: null,
+    userToken: null,
   },
   loaded: false,
 };
@@ -21,8 +22,9 @@ const authSlice = createSlice({
       state.currentUser = {
         userId: null,
         userName: null,
-        userPhoto: null,
+        userPhone: null,
         userEmail: null,
+        userToken: null,
       };
       state.loaded = false;
     },

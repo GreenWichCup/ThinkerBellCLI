@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import auth from "@react-native-firebase/auth"
 import { ActivityIndicator, Colors } from "react-native-paper";
 import { login } from "../../../redux/actions/auth";
 import { View, Alert } from "react-native";
 import {
   AccountContainer,
-  AuthButton,
+  LoginBtn,
   AuthInput,
   ErrorContainer,
+  BtnContainer,
 } from "../components/account-styles";
 import Logo from "../../../../assets/images/LOGO_300.svg";
 import { Spacer } from "../../../components/spacer/spacer-component";
 import { Text } from "../../../components/typography/text-component";
 import { ScreenOsVariant } from "./ScreenOsVariant";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -30,10 +33,24 @@ export const LoginScreen = ({ navigation }) => {
       dispatch(login(email, password));
     } else {
       Alert.alert('Login', 'Email and password are invalid', [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
+        { text: 'OK' },
       ]);
     }
   };
+
+  const handleResetPassword = async () => {
+    if (email != null) {
+      auth().sendPasswordResetEmail(email)
+        .then(() => {
+          Alert.alert('Password reset link sent to your email');
+        }).catch((err) => {
+          console.log("error reset function ", err)
+        });
+
+    } else {
+      Alert.alert("Please enter a valid email.");
+    }
+  }
 
   return (
     <ScreenOsVariant>
@@ -49,39 +66,45 @@ export const LoginScreen = ({ navigation }) => {
           autoCapitalize="none"
           onChangeText={(u) => setEmail(u)}
         />
-        <Spacer size="large">
-          <AuthInput
-            label="Password"
-            value={password}
-            textContentType="password"
-            secureTextEntry
-            autoCapitalize="none"
-            onChangeText={(p) => setPassword(p)}
-          />
-        </Spacer>
+        <Spacer size="small" />
+        <AuthInput
+          label="Password"
+          value={password}
+          textContentType="password"
+          secureTextEntry
+          autoCapitalize="none"
+          onChangeText={(p) => setPassword(p)}
+        />
+        <Spacer size="large" />
         {error && (
           <ErrorContainer size="large">
             <Text variant="error">{error}</Text>
           </ErrorContainer>
         )}
-        <Spacer size="large">
-          {!isLoading ? (
-            <AuthButton
-              icon="lock-open-outline"
-              mode="contained"
-              onPress={handleLogin}
-            >
-              Login
-            </AuthButton>
-          ) : (
-            <ActivityIndicator animating={true} color={Colors.red400} />
-          )}
-        </Spacer>
-        <Spacer size="large">
-          <AuthButton mode="contained" onPress={() => navigation.goBack()}>
-            Back
-          </AuthButton>
-        </Spacer>
+        {!isLoading ? (
+          <>
+            <BtnContainer>
+              <LoginBtn icon="keyboard-return" mode="contained" onPress={() => navigation.goBack()}>
+                Back
+              </LoginBtn>
+              <LoginBtn
+                icon="lock-open-outline"
+                mode="contained"
+                onPress={handleLogin}
+              >
+                Login
+              </LoginBtn>
+              <Spacer size="large" />
+            </BtnContainer>
+            <Spacer size="large" />
+            <TouchableOpacity style={{ alignSelf: "center" }} onPress={handleResetPassword}>
+              <Text>
+                Forgot password ?
+              </Text>
+            </TouchableOpacity></>
+        ) : (
+          <ActivityIndicator animating={true} color={Colors.red400} />
+        )}
       </AccountContainer>
     </ScreenOsVariant>
   );

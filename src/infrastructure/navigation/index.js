@@ -21,22 +21,10 @@ export const Navigation = () => {
   const [userLogged, setUserLogged] = useState(null);
   const dispatch = useDispatch();
 
-  async function saveTokenToDatabase(token, id) {
-    // Assume user is already signed in
-
-    // Add the token to the users datastore
-    await firestore()
-      .collection('users')
-      .doc(id)
-      .update({
-        token: firestore.FieldValue.arrayUnion(token),
-      });
-  }
   useEffect(() => {
     auth().onAuthStateChanged(user => {
       if (user) {
         console.log("user redux:", userAuthState.currentUser.userId);
-
         firestore()
           .collection('users')
           .doc(user.uid)
@@ -51,7 +39,7 @@ export const Navigation = () => {
           })
           .then(results => {
             //got possible unhandledPromise
-            const { userId, userName, userPhoto, token, userEmail } = results;
+            const { userId, userName, userPhoto, token, userEmail, userPhone } = results;
             console.log('Navigation main / user redux state : ', results);
             dispatch(
               userStateChange({
@@ -60,6 +48,7 @@ export const Navigation = () => {
                 userPhoto: userPhoto,
                 userEmail: userEmail,
                 token: token,
+                userPhone: userPhone
               }),
             );
           });
@@ -71,6 +60,10 @@ export const Navigation = () => {
 
     // Listen to whether the token changes
   }, [dispatch]);
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <NavigationContainer>

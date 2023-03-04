@@ -45,13 +45,13 @@ const profileMenu = [
     id: 1,
     title: "Info",
     color: "#FF4500",
-    image: require("../../../../assets/images/user.png"),
+    image: require("../../../../assets/images/user_VERT.png"),
   },
   {
     id: 2,
     title: "Products",
     color: "#87CEEB",
-    image: require("../../../../assets/images/new-product.png"),
+    image: require("../../../../assets/images/new-product_VERT.png"),
   },
   {
     id: 3,
@@ -63,7 +63,7 @@ const profileMenu = [
     id: 4,
     title: "Settings",
     color: "#6A5ACD",
-    image: require("../../../../assets/images/ic_profile_settings.png"),
+    image: require("../../../../assets/images/ic_profile_settings_VERT.png"),
   },
 ];
 
@@ -96,7 +96,7 @@ export const ProfileScreen = ({ route, navigation }) => {
   };
 
   const getProfilePicture = useCallback(async () => {
-    const defaultPhoto = "https://firebasestorage.googleapis.com/v0/b/tatthood-ee0f3.appspot.com/o/app_images%2Fuser.png?alt=media&token=a3fac232-3d6c-4336-aea6-ee04acc9b036";
+    const defaultPhoto = "https://firebasestorage.googleapis.com/v0/b/tatthood-ee0f3.appspot.com/o/app_images%2Fuser_VERT.png?alt=media&token=a3fac232-3d6c-4336-aea6-ee04acc9b036";
     try {
       const photoUri = await AsyncStorage.getItem(
         userAuthState.currentUser.userId
@@ -150,13 +150,13 @@ export const ProfileScreen = ({ route, navigation }) => {
         <ProfileInfo>
           <ThinkCounter>
             <IconThink
-              source={require("../../../../assets/images/ic_total_sent.png")}
+              source={require("../../../../assets/images/ic_total_sent_VERT.png")}
             />
             <Amount>200</Amount>
           </ThinkCounter>
           <ThinkCounter>
             <IconThink
-              source={require("../../../../assets/images/ic_total_received.png")}
+              source={require("../../../../assets/images/ic_total_received_VERT.png")}
             />
             <Amount>200</Amount>
           </ThinkCounter>

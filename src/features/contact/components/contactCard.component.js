@@ -37,7 +37,6 @@ export const ContactCardItem = ({ contactInfo = {}, sendNotification, onPress })
           {contactInfo.hasThumbnail === false ? (
             <UserPhoto width={64} height={64} />
           ) : (
-
             <ContactAvatar source={{ uri: contactInfo.thumbnailPath }} />
           )}
         </View>

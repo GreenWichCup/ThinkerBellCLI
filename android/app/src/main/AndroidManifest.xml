@@ -21,11 +21,12 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme">
 
-      <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/launch_screen" /> 
+      <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_logo_notification" /> 
 
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import {
   AccountBackground,
   AccountContainer,
-  AuthButton,
+  AccountBtn,
   AccountCover,
   LogoContainer,
 } from "../components/account-styles";
@@ -18,15 +18,14 @@ export const AccountScreen = ({ route, navigation }) => {
         <View style={{ alignSelf: "center", marginBottom: 24 }}>
           <Logo width={128} height={128} />
         </View>
-        <AuthButton
+        <AccountBtn
           icon="account-arrow-right"
           mode="contained"
           onPress={() => navigation.navigate("Login")}
         >
           Login
-        </AuthButton>
-        <Spacer size="large" />
-        <AuthButton
+        </AccountBtn>
+        <AccountBtn
           icon="account-details"
           mode="contained"
           onPress={() =>
@@ -36,7 +35,7 @@ export const AccountScreen = ({ route, navigation }) => {
           }
         >
           Register
-        </AuthButton>
+        </AccountBtn>
       </AccountContainer>
     </ScreenOsVariant>
   );
