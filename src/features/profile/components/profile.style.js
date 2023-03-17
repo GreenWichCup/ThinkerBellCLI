@@ -27,19 +27,28 @@ export const IconThink = styled.Image`
 export const AvailableThink = styled.Text`
   font-size: 18;
   align-self: center;
+  color: black;
+
 `;
 export const ProductTitle = styled.Text`
   font-size: 18;
+  color: black;
   align-self: center;
+  color: black;
+
 `;
 export const PurchaseDate = styled.Text`
   font-size: 18;
   align-self: center;
+  color: black;
+
 `;
 
 export const UsedThink = styled.Text`
   font-size: 18;
   align-self: center;
+  color: black;
+
 `;
 
 export const ProfileInfo = styled.View`

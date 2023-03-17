@@ -79,6 +79,16 @@ const userProductListSlice = createSlice({
         };
       },
     },
+    updateThinkAmout: {
+      reducer(state, action) {
+        state.userProductList.forEach((p) => {
+          if (p.product_name === action.payload) {
+            p.available_think -= 1;
+            p.used_think += 1;
+          }
+        })
+      }
+    }
   },
   extraReducers(builder) {
     builder
@@ -108,9 +118,8 @@ const userProductListSlice = createSlice({
   },
 });
 
-export const loadUserProductList = (state) =>
-  state.userProductList.userProductList;
+export const loadUserProductList = (state) => state.userProductList.userProductList;
 export const getUserProductListStatus = (state) => state.userProductList.status;
 export const getUserProductListError = (state) => state.userProductList.error;
-export const { addUserProductList } = userProductListSlice.actions;
+export const { addUserProductList, updateThinkAmout } = userProductListSlice.actions;
 export default userProductListSlice.reducer;

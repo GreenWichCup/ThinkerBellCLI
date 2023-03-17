@@ -1,30 +1,33 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { AccountNavigator } from './account-navigator';
+import { AppNavigator } from './app-navigator';
 
-import { useDispatch, useSelector } from 'react-redux';
+
 //import { getAuth, onAuthStateChanged } from "firebase/auth";
 import messaging from '@react-native-firebase/messaging';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
+import { useDispatch, useSelector } from 'react-redux';
 import {
   userStateChange,
   userStateValue,
 } from '../../redux/store/slices/authSlice';
+import { fetchContacts, getContactsStatus } from '../../redux/store/slices/contactListSlice';
+import { fetchUserProductList } from '../../redux/store/slices/userThinkCounterSlice';
+import { fetchUserList } from '../../redux/store/slices/userDbListSlice';
 
-import { AccountNavigator } from './account-navigator';
-import { AppNavigator } from './app-navigator';
+
+
 
 export const Navigation = () => {
   const userAuthState = useSelector(userStateValue);
-  const [isLoading, setIsLoading] = useState(true);
-  const [userLogged, setUserLogged] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     auth().onAuthStateChanged(user => {
       if (user) {
-        console.log("user redux:", userAuthState.currentUser.userId);
+        console.log("user onAuthStateChanged: ", user.uid);
         firestore()
           .collection('users')
           .doc(user.uid)
@@ -51,19 +54,21 @@ export const Navigation = () => {
                 userPhone: userPhone
               }),
             );
-          });
+          })
+
+
+          ;
+
       }
     });
     // If using other push notification providers (ie Amazon SNS, etc)
     // you may need to get the APNs token instead for iOS:
     // if(Platform.OS == 'ios') { messaging().getAPNSToken().then(token => { return saveTokenToDatabase(token); }); }
-
     // Listen to whether the token changes
+
   }, [dispatch]);
 
-  useEffect(() => {
-    
-  }, []);
+
 
   return (
     <NavigationContainer>

@@ -30,7 +30,8 @@ export const UserProductScreen = () => {
   `;
 
   const renderItems = ({ item, index }) => {
-    return <ProfileProduct productInfo={item} key={index} />;
+    console.log("item ", item);
+    return <ProfileProduct product_name={item.product_name} available_think={item.available_think} used_think={item.used_think} purchase_date={item.purchase_date} key={index} />;
   };
 
   return (

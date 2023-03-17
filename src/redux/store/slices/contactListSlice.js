@@ -43,7 +43,6 @@ const contactListSlice = createSlice({
   reducers: {
     addContacts: {
       reducer(state, action) {
-        console.log("log addContact payload: ", action.payload);
         state.contactList.push(action.payload);
       },
       prepare(displayName, recordID, thumbnailPath, hasThumbnail, phoneNumbers) {
@@ -58,31 +57,44 @@ const contactListSlice = createSlice({
         };
       },
     },
+    filterContact: {
+      reducer(state, action) {
+        action.payload.forEach(user => {
+          state.contactList.forEach(c => {
+
+          })
+        });
+      },
+      prepare(displayName, recordID, thumbnailPath, hasThumbnail, phoneNumbers) {
+        return {
+          payload: {
+            displayName,
+            recordID,
+            thumbnailPath,
+            hasThumbnail,
+            phoneNumbers
+          },
+        };
+      },
+
+    }
   },
   extraReducers(builder) {
     builder
       .addCase(fetchContacts.pending, (state, action) => {
         state.status = "loading";
-        console.log("redux fetchContact.pending: ", action.payload)
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.status = "succeeded";
         let contactsPhone = [];
         action.payload.forEach((contact) => {
           if (contact.phoneNumbers.length > 0) {
+            var regexPattern = /[^A-Za-z0-9]/g;
+            let userPhoneString = contact.phoneNumbers[0].number.replace(regexPattern, "");
+            contact.phoneNumbers = userPhoneString.slice(userPhoneString.length - 9);
             contactsPhone.push(contact);
           }
         })
-        /* const finalContactArray = contactsPhone.map((c) => {
-           const contactModel = {
-             displayName: c.displayName.length ? c.displayName : "N/A",
-             recordID: c.recordID,
-             thumbnailPath: c.hasThumbnail ? c.thumbnailPath : require("../../../../assets/images/LOGO-enter.png"),
-             hasThumbnail: c.hasThumbnail,
-             phoneNumbers: c.phoneNumbers.length ? c.phoneNumbers[0].number : null
-           };
-           return contactModel;
-         });*/
         state.contactList = state.contactList.concat(contactsPhone);
       })
       .addCase(fetchContacts.rejected, (state, action) => {

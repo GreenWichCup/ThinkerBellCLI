@@ -5,13 +5,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  Button
 } from "react-native";
 import { FormProvider, useForm } from 'react-hook-form'
 import LottieView from 'lottie-react-native'
 import CreditCardForm from 'rn-credit-card'
-import { color } from "react-native-reanimated";
 
-export const CreditCardComponent = () => {
+export const CreditCardComponent = ({ savePurchase }) => {
   const formMethods = useForm({
     // to trigger the validation on the blur event
     mode: 'onBlur',
@@ -21,9 +21,23 @@ export const CreditCardComponent = () => {
       expiration: '',
       cvv: '',
     },
-  })
+  });
+  const handleSaveProduct = async () => {
+    await saveProductToDb(cart, userProducts)
+      .then(() => {
+        dispatch(fetchUserProductList());
+      })
+      .then(() => {
+        clearCart();
+      })
+      .then(() => {
+        navigation.navigate("ThinkShopList");
+      });
+  };
+
   const { handleSubmit, formState } = formMethods;
-  const onSubmit = (model) => {
+  const onSubmit = async (model) => {
+
     Alert.alert('Success: ' + JSON.stringify(model, null, 2));
   };
   return (
@@ -51,7 +65,7 @@ export const CreditCardComponent = () => {
           <Button
             style={styles.button}
             title={'CONFIRM PAYMENT'}
-            onPress={handleSubmit(onSubmit)}
+            onPress={handleSubmit(savePurchase)}
           />
         )}
       </SafeAreaView>

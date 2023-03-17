@@ -29,16 +29,17 @@ export const LoadingContainer = styled.View`
 
 export const List = styled(FlatList).attrs({
   paddingHorizontal: 5,
+  padding: 4,
+
 })``;
 
-export const ContactCard = styled(Card).attrs({
-  padding: 4,
-})`
-  margin-bottom: ${(props) => props.theme.space[3]};
-  flex: 1;
-  max-width: 45%;
-  margin-left: 8px;
-  margin-right: 8px;
+export const ContactCard = styled(Card)`
+margin-bottom: ${(props) => props.theme.space[3]};
+flex: 1;
+max-width: 45%;
+margin-left: 8px;
+margin-right: 8px;
+border: solid 1px ${(props) => props.exists === false ? "green" : "red"}; 
 `;
 
 export const ContactName = styled(Text).attrs({

@@ -12,27 +12,27 @@ import {
   IconThink,
 } from "../components/profile.style";
 
-const ProfileProduct = ({ productInfo = {} }) => {
+const ProfileProduct = ({ product_name, available_think, used_think, purchase_date }) => {
   return (
     <ProductMainContainer>
-      <ProductTitle>{productInfo.product_name}</ProductTitle>
+      <ProductTitle>{product_name}</ProductTitle>
       <ThinkUsageContainer>
         <IconThink
           source={require("../../../../assets/images/ic_remaining_think.png")}
         />
-        <AvailableThink>{productInfo.available_think}</AvailableThink>
+        <AvailableThink>{available_think}</AvailableThink>
       </ThinkUsageContainer>
       <ThinkUsageContainer>
         <IconThink
           source={require("../../../../assets/images/ic_used_think.png")}
         />
-        <AvailableThink>{productInfo.used_think}</AvailableThink>
+        <AvailableThink>{used_think}</AvailableThink>
       </ThinkUsageContainer>
       <ThinkUsageContainer>
         <IconThink
           source={require("../../../../assets/images/ic_profile_calendar.png")}
         />
-        <AvailableThink>{productInfo.purchase_date}</AvailableThink>
+        <AvailableThink>{purchase_date}</AvailableThink>
       </ThinkUsageContainer>
     </ProductMainContainer>
   );

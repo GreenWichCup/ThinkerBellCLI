@@ -32,9 +32,10 @@ export const CheckoutScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const userProducts = useSelector(loadUserProductList);
 
-  const [name, setName] = useState("");
-
   const handleSaveProduct = async () => {
+    console.log("cart context product data:", cart);
+    console.log("cart redux product data:", userProducts);
+
     await saveProductToDb(cart, userProducts)
       .then(() => {
         dispatch(fetchUserProductList());
@@ -92,17 +93,7 @@ export const CheckoutScreen = ({ navigation }) => {
         </Spacer>
 
         <Spacer position="top" size="large" />
-        <CreditCardComponent />
-        <PayButton
-          icon="currency-usd"
-          mode="contained"
-          onPress={() => {
-            //firestore and redux functions for saving user purchase and adding to the state in redux store;
-            handleSaveProduct();
-          }}
-        >
-          Pay
-        </PayButton>
+        <CreditCardComponent savePurchase={handleSaveProduct} />
         <Spacer position="top" size="large">
           <ClearButton icon="cart-off" mode="contained" onPress={clearCart}>
             Clear cart

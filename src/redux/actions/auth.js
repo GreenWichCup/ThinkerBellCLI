@@ -1,7 +1,7 @@
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
-export const login = (email, password) => (dispatch) =>
+export const login = (email, password) => () =>
   new Promise((resolve, reject) => {
     auth()
       .signInWithEmailAndPassword(email, password)
@@ -24,20 +24,6 @@ export const register = (email, password) => (dispatch) =>
       .catch((e) => {
         console.log("error", e)
         reject();
-      });
-  });
-
-export const updateUser = (id, uri) => (dispatch) =>
-  new Promise((resolve, reject) => {
-    firestore().collection("users").doc(id).update({
-      userPhoto: uri,
-    })
-      .then(() => {
-        resolve();
-      })
-      .catch((e) => {
-        reject();
-        console.log("error")
       });
   });
 

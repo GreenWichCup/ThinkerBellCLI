@@ -38,7 +38,7 @@ import {
   ProductList,
   ProfilePhotoCard
 } from "../components/profile.style";
-import { set } from "immer/dist/internal";
+import { loadUserList } from "../../../redux/store/slices/userDbListSlice";
 
 const profileMenu = [
   {
@@ -70,9 +70,11 @@ const profileMenu = [
 export const ProfileScreen = ({ route, navigation }) => {
   const userAuthState = useSelector(userStateValue);
   const dispatch = useDispatch();
+  // const list = useSelector(loadUserList);
   const [profilePhoto, setProfilePhoto] = useState(null);
 
   const handleMenuChoice = (itemTitle) => {
+    //    console.log("list ", list)
     switch (itemTitle) {
       case "Info":
         navigation.navigate("UserInfoScreen");

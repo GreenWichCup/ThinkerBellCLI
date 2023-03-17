@@ -1,25 +1,23 @@
 import React from "react";
-import { TouchableOpacity, View, Image } from "react-native";
-import { useSelector } from "react-redux";
+import { TouchableOpacity, View, Image, StyleSheet } from "react-native";
 import { Spacer } from "../../../components/spacer/spacer-component";
 import {
   ContactAvatar,
-  ContactCard,
   ContactName,
+  ContactCard,
   SendButtonContainer,
   ButtonImage,
 } from "./contact-components.styles";
 import BtnSend from "../../../../assets/images/think_send_btn.svg";
 import UserPhoto from "../../../../assets/images/Bell_solo2.svg";
 import { Favourite } from "../../../components/favourites/favourite-component";
-import { loadUserProductList } from "../../../redux/store/slices/userThinkCounterSlice";
 
-export const ContactCardItem = ({ contactInfo = {}, sendNotification, onPress }) => {
+export const ContactCardItem = ({ contactInfo = {}, sendNotification, onPress, exists }) => {
   const { name, id, uri, imageAvailable } = contactInfo;
-  const userProducts = useSelector(loadUserProductList);
   return (
-    <ContactCard>
+    <ContactCard exists={exists} >
       <TouchableOpacity
+        disabled={exists}
         onPress={onPress}
       >
         <ContactName numberOfLines={1} variant="label">
@@ -40,10 +38,9 @@ export const ContactCardItem = ({ contactInfo = {}, sendNotification, onPress })
             <ContactAvatar source={{ uri: contactInfo.thumbnailPath }} />
           )}
         </View>
-
         <SendButtonContainer>
           <Favourite contact={contactInfo} />
-          <ButtonImage onPress={sendNotification}>
+          <ButtonImage disabled={exists} onPress={sendNotification}>
             <BtnSend width={64} height={64} />
           </ButtonImage>
         </SendButtonContainer>
@@ -51,3 +48,4 @@ export const ContactCardItem = ({ contactInfo = {}, sendNotification, onPress })
     </ContactCard>
   );
 };
+

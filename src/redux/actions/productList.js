@@ -2,8 +2,8 @@ import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 import { CartContext } from "../../services/cart/cart-context";
 
-export const saveProductToDb = async (thinkShop = [], userProducts = []) => {
-  let newProductsArray = userProducts;
+export const saveProductToDb = async (thinkShop, userProducts) => {
+  let newProductsArray = [...userProducts];
   const d = new Date();
   const timestamp = d.getMilliseconds();
   thinkShop.forEach((product) => {
@@ -15,7 +15,8 @@ export const saveProductToDb = async (thinkShop = [], userProducts = []) => {
       available_think: product.available_think,
       used_think: 0,
     };
-    newProductsArray = [...userProducts, productObj];
+    newProductsArray.push(productObj)
+
   });
 
   try {

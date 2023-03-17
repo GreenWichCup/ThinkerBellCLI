@@ -7,7 +7,9 @@ import { TouchableOpacity } from "react-native";
 
 import { FavouritesContext } from "../../services/favourites/favourites-context";
 
-const FavouriteButton = styled(TouchableOpacity)``;
+const FavouriteButton = styled(TouchableOpacity)`
+padding-left: 4px;
+`;
 
 export const Favourite = ({ contact }) => {
   const { favourites, addToFavourites, removeFromFavourites } =
