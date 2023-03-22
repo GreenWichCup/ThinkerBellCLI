@@ -58,7 +58,7 @@ const getFcmToken = async () => {
 export const notificationChannel = async (channelId, soundName) => {
   await PushNotification.channelExists(channelId, async exists => {
     console.log(exists); // true/false
-    if (!exists) {
+    if (exists === false) {
       await PushNotification.createChannel(
         {
           channelId: channelId, // (required)

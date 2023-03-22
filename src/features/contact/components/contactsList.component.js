@@ -34,7 +34,6 @@ import { notificationChannel } from "../../../services/notifications/notificatio
 import { FavouriteBar } from "../../../components/favourites/favourite-bar-component";
 import { FavouritesContext } from "../../../services/favourites/favourites-context";
 import { Spacer } from "../../../components/spacer/spacer-component";
-import { exists } from "react-native-fs";
 
 export const ContactList = ({ navigation }) => {
   const notifIcon = require("../../../../assets/images/send_btn.png");
@@ -81,7 +80,7 @@ export const ContactList = ({ navigation }) => {
       'Bearer AAAAZlqUaak:APA91bFV4p94jvFVLBLMALFqBEoT5ppxCq3QEU4lKycbnhyM55nJqQWclcHxgFcm0G1ixzbeSfiCW6e6F7MIi4kj6HSWaaqPAwoZeRsN7NoRC7fABIhulVLjchd2pjHy3emJzRyp0GAZ',
     );
     var raw = JSON.stringify({
-      to: "d7n21gJmR5a0dWNMvThnkC:APA91bFlQPN-nxG69i-JFUITd-yEvg7JNktHadUq__1sFiiRDJ5OZRhDwfRjbrabmy426ht3E45BPtg5OcZa2IrDFM8Yb7vlKZ8r7woe_CxQE_13w1EcJ2x5_dAx6h0HxB_3IQmIOdD9",
+      to: "eO0brg-YQEGMR6yd-OQISX:APA91bGQ_brcPC5XPEejtt1WeskxO3p_1NDxbvlrhLaVcuSWEIXGdBOnoiRm7FMB2EfyTTMTnIXmDuP8ULznnU5VJnon_NNuKSMN_i9dDenmUAknEi227UdwEbUSMHuwReWhC9YPR317",
       data: {
         channelId: channel_id,
         soundName: sound_name,
@@ -110,34 +109,14 @@ export const ContactList = ({ navigation }) => {
 
   };
 
-  const userExists = async (contactItem) => {
-    let exists = false;
-    userList.forEach((u) => {
-      const nineDigitsNumber = u.userPhone.slice(u.userPhone.length - 9);
-      console.log("nineDigitsNumber", nineDigitsNumber);
-      if (nineDigitsNumber === contactItem.phoneNumbers)
-        exists = true;
-    }
-    );
-    return exists
-  }
-
   const renderItems = ({ item, index }) => {
-    let matchPhone = true;
-    userList.forEach((u) => {
-      const nineDigitsNumber = u.userPhone.slice(u.userPhone.length - 9);
-      if (nineDigitsNumber === item.phoneNumbers)
-        matchPhone = false;
-    }
-    );
+
     return (
       <ContactCardItem
-        exists={matchPhone}
         key={item.recordID}
         contactInfo={item}
-        sendNotification={() => { sendSingleDeviceNotification("001", "bell_1") }}
         onPress={() => {
-          console.log("green", matchPhone);
+          null;
         }}
       />
     );

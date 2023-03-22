@@ -13,8 +13,6 @@ import {
   userStateChange,
   userStateValue,
 } from '../../redux/store/slices/authSlice';
-import { fetchContacts, getContactsStatus } from '../../redux/store/slices/contactListSlice';
-import { fetchUserProductList } from '../../redux/store/slices/userThinkCounterSlice';
 import { fetchUserList } from '../../redux/store/slices/userDbListSlice';
 
 
@@ -23,11 +21,10 @@ import { fetchUserList } from '../../redux/store/slices/userDbListSlice';
 export const Navigation = () => {
   const userAuthState = useSelector(userStateValue);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    auth().onAuthStateChanged(user => {
+  const authStateCallback = useCallback(() => {
+    auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log("user onAuthStateChanged: ", user.uid);
+        console.log("user redux:", userAuthState.currentUser.userId);
         firestore()
           .collection('users')
           .doc(user.uid)
@@ -54,10 +51,7 @@ export const Navigation = () => {
                 userPhone: userPhone
               }),
             );
-          })
-
-
-          ;
+          });
 
       }
     });
@@ -65,8 +59,10 @@ export const Navigation = () => {
     // you may need to get the APNs token instead for iOS:
     // if(Platform.OS == 'ios') { messaging().getAPNSToken().then(token => { return saveTokenToDatabase(token); }); }
     // Listen to whether the token changes
-
-  }, [dispatch]);
+  }, [])
+  useEffect(() => {
+    authStateCallback()
+  }, [authStateCallback]);
 
 
 

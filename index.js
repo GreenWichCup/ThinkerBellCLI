@@ -14,6 +14,7 @@ messaging().onMessage(async remoteMessage => {
   const sName = remoteMessage.data.soundName;
   console.log(`cId ${cId} sName ${sName}`);
   await notificationChannel(cId, sName)
+
   await PushNotification.localNotification({
     /* Android Only Properties */
     channelId: cId, // (required) channelId, if the channel doesn't exist, notification will not trigger.
