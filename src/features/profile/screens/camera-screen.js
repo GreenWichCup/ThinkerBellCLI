@@ -38,17 +38,14 @@ export const CameraScreen = ({ navigation }) => {
   const cameraRef = useRef(Camera);
   const dispatch = useDispatch();
   const userDataState = useSelector(userStateValue);
-  console.log('Data user dispatch before', userDataState.currentUser);
   const devices = useCameraDevices('wide-angle-camera');
   const device = devices.front;
 
   const snap = async () => {
     if (cameraRef) {
-      console.log('before photo was : ', userDataState.currentUser.userPhoto);
       try {
         await cameraRef.current.takePhoto()
           .then((result) => {
-            console.log("snap photo: ", result.path);
             AsyncStorage.setItem(userDataState.currentUser.userId, result.path);
             dispatch(userStateChange({
               userId: userDataState.currentUser.userId,

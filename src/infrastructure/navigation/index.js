@@ -17,14 +17,16 @@ import { fetchUserList } from '../../redux/store/slices/userDbListSlice';
 
 
 
-
 export const Navigation = () => {
   const userAuthState = useSelector(userStateValue);
   const dispatch = useDispatch();
   const authStateCallback = useCallback(() => {
-    auth().onAuthStateChanged((user) => {
+    auth().onAuthStateChanged(async (user) => {
       if (user) {
         console.log("user redux:", userAuthState.currentUser.userId);
+        const tok = await messaging().getToken();
+        await firestore().collection("users").doc(user.uid).update({ token: firestore.FieldValue.arrayUnion(tok) })
+
         firestore()
           .collection('users')
           .doc(user.uid)

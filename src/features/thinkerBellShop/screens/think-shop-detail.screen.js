@@ -50,7 +50,6 @@ export const ThinkShopDetailScreen = ({ navigation, route }) => {
       setSoundIsPlaying(true);
       setRingTone(sound);
       const soundDataObject = await sound.getStatusAsync();
-      console.log(soundDataObject.durationMillis);
 
       //const soundDuration = await soundDataObject.durationMillis;
       await sound.playAsync();

@@ -43,10 +43,6 @@ export const UserInfoScreen = ({ route, navigation }) => {
       setProfilePhoto(photoUri);
     } catch (error) {
       console.log("AsyncStorage error:", error);
-      console.log(
-        "user Data for photo edit profile :",
-        userDataState.currentUser
-      );
     }
   }, [userDataState.currentUser]);
 

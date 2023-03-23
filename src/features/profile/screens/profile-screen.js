@@ -74,7 +74,6 @@ export const ProfileScreen = ({ route, navigation }) => {
   const [profilePhoto, setProfilePhoto] = useState(null);
 
   const handleMenuChoice = (itemTitle) => {
-    //    console.log("list ", list)
     switch (itemTitle) {
       case "Info":
         navigation.navigate("UserInfoScreen");

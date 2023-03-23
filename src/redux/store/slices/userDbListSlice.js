@@ -24,7 +24,6 @@ export const fetchUserList = createAsyncThunk(
     } catch (error) {
       console.log("error fetching:", error);
     }
-    console.log("user array fetched ", array);
     return array;
 
   }
@@ -62,11 +61,9 @@ const userListSlice = createSlice({
     builder
       .addCase(fetchUserList.pending, (state, action) => {
         state.status = "loading";
-        console.log("redux fetchFirestoreUsers.pending: ", action.payload)
       })
       .addCase(fetchUserList.fulfilled, (state, action) => {
         state.status = "succeeded";
-        console.log("fetchUserList payload", action.payload);
         const userLoaded = action.payload.map(u => {
           const userData = {
             userName: u.userName,

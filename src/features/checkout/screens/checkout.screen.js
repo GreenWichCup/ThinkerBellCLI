@@ -33,8 +33,6 @@ export const CheckoutScreen = ({ navigation }) => {
   const userProducts = useSelector(loadUserProductList);
 
   const handleSaveProduct = async () => {
-    console.log("cart context product data:", cart);
-    console.log("cart redux product data:", userProducts);
 
     await saveProductToDb(cart, userProducts)
       .then(() => {
@@ -53,7 +51,6 @@ export const CheckoutScreen = ({ navigation }) => {
       <Spacer position="bottom" size="large">
         <ProductCartComponent
           onPress={() => {
-            console.log("cart item click: ", item);
             removeItem(index);
           }}
           i={index}

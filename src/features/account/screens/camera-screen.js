@@ -31,19 +31,16 @@ export const CameraScreen = ({ navigation }) => {
   const cameraRef = useRef(Camera);
   // const dispatch = useDispatch();
   const userAuthState = useSelector(userStateValue);
-  console.log('Data user dispatch before', userAuthState.currentUser);
   const devices = useCameraDevices('wide-angle-camera');
   const device = devices.front;
 
   const snap = async () => {
     if (cameraRef) {
-      console.log('before key was : ', userAuthState.currentUser.userPhoto);
       try {
         const photo = await cameraRef.current.takePhoto()
-          .then((result) =>
-            console.log(result));
-        console.log(photo);
-        navigation.navigate('UserInfoScreen');
+          .then(() =>
+
+            navigation.navigate('UserInfoScreen'));
       } catch (error) {
         console.log('Data not stored', error);
       }
