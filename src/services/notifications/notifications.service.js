@@ -55,7 +55,7 @@ const getFcmToken = async () => {
   }
 };
 
-export const notificationChannel = async (channelId, soundName) => {
+export const notificationChannel = async (channelId) => {
   await PushNotification.channelExists(channelId, async exists => {
     console.log(exists); // true/false
     if (!exists) {
@@ -63,12 +63,48 @@ export const notificationChannel = async (channelId, soundName) => {
         {
           channelId: channelId, // (required)
           channelName: channelId, // (required)
-          soundName: soundName,
+          soundName: "mpd",
         },
-        created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
-      );
+        created => console.log(`createChannel returned '${created}' ${channelId}`), // (optional) callback returns whether the channel was created, false means it already existed.
+      )
     }
   });
 }
 
+export const fetchThinkSent = async (userId) => {
+  let sentThinkCounter;
 
+  try {
+    await firestore()
+      .collection("think_counter")
+      .doc(userId)
+      .collection("sent")
+      .get()
+      .then((querySnapshot) => {
+        sentThinkCounter = querySnapshot.size
+      });
+
+  } catch (error) {
+    console.log("error fetching:", error);
+  }
+  return sentThinkCounter;
+}
+
+export const fetchThinkReceived = async (userId) => {
+  let sentThinkCounter;
+
+  try {
+    await firestore()
+      .collection("think_counter")
+      .doc(userId)
+      .collection("sent")
+      .get()
+      .then((querySnapshot) => {
+        sentThinkCounter = querySnapshot.size
+      });
+
+  } catch (error) {
+    console.log("error fetching:", error);
+  }
+  return sentThinkCounter;
+}

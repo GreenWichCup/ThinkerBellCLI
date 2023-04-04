@@ -13,9 +13,7 @@ import {
   userStateChange,
   userStateValue,
 } from '../../redux/store/slices/authSlice';
-import { fetchUserList } from '../../redux/store/slices/userDbListSlice';
-
-
+import { fetchThinkSent, fetchThinkReceived } from '../../services/notifications/notifications.service';
 
 export const Navigation = () => {
   const userAuthState = useSelector(userStateValue);
@@ -26,7 +24,8 @@ export const Navigation = () => {
         console.log("user redux:", userAuthState.currentUser.userId);
         const tok = await messaging().getToken();
         await firestore().collection("users").doc(user.uid).update({ token: firestore.FieldValue.arrayUnion(tok) })
-
+        const thinkSent = await fetchThinkSent(user.uid);
+        const thinkReceived = await fetchThinkReceived(user.uid);
         firestore()
           .collection('users')
           .doc(user.uid)
@@ -50,7 +49,9 @@ export const Navigation = () => {
                 userPhoto: userPhoto,
                 userEmail: userEmail,
                 token: token,
-                userPhone: userPhone
+                userPhone: userPhone,
+                thinkSent: thinkSent,
+                thinkReceived: thinkReceived
               }),
             );
           });
@@ -65,8 +66,6 @@ export const Navigation = () => {
   useEffect(() => {
     authStateCallback()
   }, [authStateCallback]);
-
-
 
   return (
     <NavigationContainer>

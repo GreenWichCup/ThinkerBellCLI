@@ -4,7 +4,8 @@ import firestore from "@react-native-firebase/firestore";
 //import { collection, getDocs, onSnapshot } from "firebase/firestore";
 //import { db, auth } from "../authentification/authentification-service";
 
-export const ThinkShopContext = React.createContext();
+export const
+  ThinkShopContext = React.createContext();
 
 export const ThinkShopContextProvider = ({ children }) => {
   const [thinkShopFinal, setThinkShopFinal] = useState([]);

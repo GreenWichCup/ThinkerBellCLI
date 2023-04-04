@@ -17,10 +17,13 @@ export const NameInput = styled(TextInput)`
   margin: ${(props) => props.theme.space[3]};
 `;
 
-export const PayButton = styled(Button).attrs({ color: colors.brand.primary })`
+export const PayButton = styled(Button).attrs({
+})`
   padding: ${(props) => props.theme.space[2]};
   width: 70%;
   align-self: center;
+  color: ${(props) => props.theme.colors.ui.success}
+
 `;
 
 export const ClearButton = styled(Button).attrs({
@@ -84,8 +87,9 @@ export const Rating = styled.View`
 export const BuyButton = styled(Button).attrs({
   color: colors.brand.primary,
   maxHeight: 40,
-  justifyContent: "center",
   uppercase: false,
-})``;
+})`
+align-self:center;
+`;
 
 export const ButtonRemove = styled(TouchableOpacity).attrs({})``;

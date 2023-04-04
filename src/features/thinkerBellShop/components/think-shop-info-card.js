@@ -17,31 +17,24 @@ import {
   BuyButton,
 } from "./think-shop-info-card-styles";
 
-export const ThinkShopInfoCard = ({ navigation, thinkShop = {} }) => {
-  const {
-    name = "Some Think Shop",
-    photoUrl = "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
-    price = "0.99$",
-    special_price = 15,
-    available_think = "",
-    ringtones = [],
-  } = thinkShop;
+export const ThinkShopInfoCard = ({ navigation, thinkShop }) => {
+
   const { addToCart, showDialog } = useContext(CartContext);
 
   return (
     <ThinkShopCard elevation={5}>
       <Info>
-        <ThinkShopCardCover source={{ uri: photoUrl }} />
+        <ThinkShopCardCover source={{ uri: thinkShop.photoUrl }} />
         <SectionRight>
-          <Text variant="caption">{name}</Text>
+          <Text variant="caption">{thinkShop.name}</Text>
           <Spacer size="medium" position="top" />
           <SectionBottom>
             <Icon
               source={require("../../../../assets/images/ic_variant_money_nbg_xs.png")}
             />
-            <PriceText>Was {price}</PriceText>
+            <PriceText>Was {thinkShop.price}</PriceText>
             <Spacer position="right" size="medium" />
-            <Text variant="body"> Now ${special_price} </Text>
+            <Text variant="body"> Now ${thinkShop.special_price} </Text>
           </SectionBottom>
           <BuyButton
             style={styles.btnAdd}
@@ -50,12 +43,10 @@ export const ThinkShopInfoCard = ({ navigation, thinkShop = {} }) => {
             onPress={() => {
               addToCart(
                 {
-                  name: name,
-                  price: special_price * 100,
-                  special_price: special_price * 100,
-                  photoUrl: photoUrl,
-                  available_think: available_think,
-                  ringtones: ringtones,
+                  name: thinkShop.name,
+                  price: thinkShop.special_price * 100,
+                  special_price: thinkShop.special_price * 100,
+                  photoUrl: thinkShop.photoUrl,
                 },
                 thinkShop
               );

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="my_app_primary_dark">#ffff</color>
+    <color name="primary_dark">#ffff</color>
     <color name="my_app_primary">#ffff</color>
     <color name="my_app_secondary">#0000</color>
     <color name="my_app_background">#ffff</color>

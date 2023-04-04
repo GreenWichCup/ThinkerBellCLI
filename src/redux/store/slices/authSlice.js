@@ -7,6 +7,8 @@ const initialState = {
     userPhone: null,
     userEmail: null,
     userToken: null,
+    thinkSent: 0,
+    thinkReceived: 0,
   },
   loaded: false,
 };
@@ -25,6 +27,8 @@ const authSlice = createSlice({
         userPhone: null,
         userEmail: null,
         userToken: null,
+        thinkSent: 0,
+        thinkReceived: 0
       };
       state.loaded = false;
     },

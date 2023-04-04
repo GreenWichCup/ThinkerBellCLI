@@ -3,6 +3,7 @@ import App from './App';
 import messaging from "@react-native-firebase/messaging";
 import PushNotification from 'react-native-push-notification';
 import { notificationChannel } from './src/services/notifications/notifications.service';
+import { receivedThinkCounter } from './src/redux/actions/productList';
 import { name as appName } from './app.json';
 
 messaging().onNotificationOpenedApp(remoteMessage => {
@@ -11,10 +12,10 @@ messaging().onNotificationOpenedApp(remoteMessage => {
 
 messaging().onMessage(async remoteMessage => {
   const cId = remoteMessage.data.channelId;
-  const sName = remoteMessage.data.soundName;
-  console.log(`cId ${cId} sName ${sName}`);
-  await notificationChannel(cId, sName)
-
+  const senderID = remoteMessage.data.senderId;
+  const senderName = remoteMessage.data.senderName;
+  console.log(`data received from ${senderID} / ${senderName} / ${cId}`)
+  await notificationChannel(cId)
   await PushNotification.localNotification({
     /* Android Only Properties */
     channelId: cId, // (required) channelId, if the channel doesn't exist, notification will not trigger.
@@ -31,6 +32,7 @@ messaging().onMessage(async remoteMessage => {
     bigLargeIcon: 'ic_launcher', // (optional) default: undefined
     bigLargeIconUrl: 'https://www.example.tld/bigicon.jpg',
     priority: 'high',
+    soundName: `mpd`,
     when: null, // (optional) Add a timestamp (Unix timestamp value in milliseconds) pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
     usesChronometer: false, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
     timeoutAfter: null, // (optional) Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled, default: null
@@ -38,16 +40,16 @@ messaging().onMessage(async remoteMessage => {
     actions: ['Yes', 'No'], // (Android only) See the doc for notification actions to know more
     invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
   });
-  PushNotification.getChannels(function (channel_ids) {
-    console.log('goat function', channel_ids); // ['channel_id_1']
-  });
+  await receivedThinkCounter(senderID, senderName)
 });
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   const cId = remoteMessage.data.channelId;
-  const sName = remoteMessage.data.soundName;
-  console.log(`cId ${cId} sName ${sName}`);
-  await notificationChannel(cId, sName)
+  const senderID = remoteMessage.data.senderId;
+  const senderName = remoteMessage.data.senderName;
+  console.log(`data received from ${senderID} / ${senderName}`)
+
+  await notificationChannel(cId)
   await PushNotification.localNotification({
     /* Android Only Properties */
     channelId: cId, // (required) channelId, if the channel doesn't exist, notification will not trigger.
@@ -69,9 +71,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
     actions: ['Yes', 'No'], // (Android only) See the doc for notification actions to know more
     invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
   });
-  PushNotification.getChannels(function (channel_ids) {
-    console.log('goat function', channel_ids); // ['channel_id_1']
-  });
+  await receivedThinkCounter(senderID, senderName)
 });
 
 messaging()

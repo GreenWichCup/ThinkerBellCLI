@@ -17,8 +17,10 @@ export const Info = styled.View`
 
 export const ThinkShopCard = styled(Card)`
   background-color: ${(props) => props.theme.colors.bg.primary};
-  margin-bottom: ${(props) => props.theme.space[0]};
-  padding-right: ${(props) => props.theme.space[0]};
+  width-max:100%;
+  margin: ${(props) => props.theme.space[1]};
+  border: 1px solid black;
+  
 `;
 
 export const ThinkShopCardCover = styled(Card.Cover)`
@@ -27,7 +29,7 @@ export const ThinkShopCardCover = styled(Card.Cover)`
   max-height: 120px;
   border-radius: 15px;
   margin-right: ${(props) => props.theme.space[1]};
-  margin-left: ${(props) => props.theme.space[2]};
+  margin-left: ${(props) => props.theme.space[1]};
 `;
 
 export const Icon = styled.Image`
@@ -35,7 +37,9 @@ export const Icon = styled.Image`
   height: 24px;
 `;
 
-export const SectionRight = styled.View``;
+export const SectionRight = styled.View`
+  width-max:70%;
+`;
 
 export const SectionBottom = styled.View`
   flex-direction: row;

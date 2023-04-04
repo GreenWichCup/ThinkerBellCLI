@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { TouchableOpacity, View, Image } from "react-native";
+import { TouchableOpacity, View, Image, FlatList } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -30,14 +30,12 @@ import { CartContext } from "../../../services/cart/cart-context";
 
 const ProductItem = ({ ...props }) => {
   return (
-    <Spacer position="bottom" size="large">
-      <FadeInView>
-        <ThinkShopInfoCard
-          navigation={props.navigation}
-          thinkShop={props.index}
-        />
-      </FadeInView>
-    </Spacer>
+    <FadeInView>
+      <ThinkShopInfoCard
+        navigation={props.navigation}
+        thinkShop={props.index}
+      />
+    </FadeInView>
   );
 };
 
@@ -83,14 +81,16 @@ export const ThinkShopScreen = ({ navigation }) => {
   `;
   const { visible } = useContext(CartContext);
 
-  const handleExpendA = () => {
-    //const state = expended;
-    setExpendedA(!expandedA);
-  };
-  const handleExpendB = () => {
-    //const state = expended;
-    setExpendedB(!expandedB);
-  };
+  const renderItems = () => {
+    return (
+      <FadeInView>
+        <ThinkShopInfoCard
+          navigation={props.navigation}
+          thinkShop={props.index}
+        />
+      </FadeInView>
+    )
+  }
 
   return (
     <SafeArea>
@@ -99,117 +99,70 @@ export const ThinkShopScreen = ({ navigation }) => {
           <Loading size={50} animating={true} color={Colors.red300} />
         </LoadingContainer>
       )}
-      <ScrollView>
-        <List.Accordion
-          id={1}
-          title="Think packs"
-          left={() => (
-            <List.Icon
-              icon={() => {
-                return (
-                  <FontAwesome5Icon
-                    name="store"
-                    size={24}
-                    color={colors.bg.tertiary}
-                  />
-                );
-              }}
-            />
-          )}
-          expanded={expandedA}
-          onPress={handleExpendA}
-        >
-          <List.Item
-            style={{
-              marginBottom: -8,
-              marginLeft: 8,
-            }}
-            left={() => {
-              return (
-                <ProductItem
-                  navigation={navigation}
-                  index={thinkShopFinal[2]}
-                />
-              );
-            }}
-          />
-          <List.Item
-            style={{ marginBottom: -8, marginLeft: 8 }}
-            left={() => {
-              return (
-                <ProductItem
-                  navigation={navigation}
-                  index={thinkShopFinal[3]}
-                />
-              );
-            }}
-          />
-          <List.Item
-            style={{ marginBottom: -8, marginLeft: 8 }}
-            left={() => {
-              return (
-                <ProductItem
-                  navigation={navigation}
-                  index={thinkShopFinal[4]}
-                />
-              );
-            }}
-          />
-        </List.Accordion>
-        <List.Accordion
-          id={2}
-          title="Think plans"
-          left={() => (
-            <List.Icon
-              icon={() => {
-                return (
-                  <FontAwesome5Icon
-                    name="user"
-                    size={24}
-                    color={colors.bg.tertiary}
-                  />
-                );
-              }}
-            />
-          )}
-          expanded={expandedB}
-          onPress={handleExpendB}
-        >
-          <List.Item
-            style={{ marginBottom: -8, marginLeft: 8 }}
-            left={() => {
-              return (
-                <ProductItem
-                  navigation={navigation}
-                  index={thinkShopFinal[0]}
-                />
-              );
-            }}
-          />
-          <List.Item
-            style={{ marginBottom: -8, marginLeft: 8 }}
-            left={() => {
-              return (
-                <ProductItem
-                  navigation={navigation}
-                  index={thinkShopFinal[1]}
-                />
-              );
-            }}
-          />
-          <List.Item
-            style={{ marginBottom: -8, marginLeft: 8 }}
-            left={() => {
-              return (
-                <ProductItem
-                  navigation={navigation}
-                  index={thinkShopFinal[5]}
-                />
-              );
-            }}
-          />
-        </List.Accordion>
-      </ScrollView>
+      <FlatList
+        data={thinkShopFinal}
+        keyExtractor={(item) => item.name}
+        renderItem={(item, index) => {
+          console.log("thinkShopFinal flatlist", item)
+          return (
+            <FadeInView>
+              <ThinkShopInfoCard
+                navigation={navigation}
+                thinkShop={item.item}
+              />
+            </FadeInView>
+          )
+        }}
+        horizontal={false}
+      />
     </SafeArea>
   );
 };
+
+/*<ScrollView style={{ flex: 1, width: "100%" }}>
+<List.Item
+  style={{
+    marginBottom: -8,
+    marginLeft: 8,
+    marginRight: 8
+  }}
+  left={() => {
+    return (
+      <ProductItem
+        navigation={navigation}
+        index={thinkShopFinal[0]}
+      />
+    );
+  }}
+/>
+<List.Item
+  style={{
+    marginBottom: -8,
+    marginLeft: 8,
+    marginRight: 8
+  }}
+  left={() => {
+    return (
+      <ProductItem
+        navigation={navigation}
+        index={thinkShopFinal[1]}
+      />
+    );
+  }}
+/>
+<List.Item
+  style={{
+    marginBottom: -8,
+    marginLeft: 8,
+    marginRight: 8
+  }}
+  left={() => {
+    return (
+      <ProductItem
+        navigation={navigation}
+        index={thinkShopFinal[2]}
+      />
+    );
+  }}
+/>
+</ScrollView>*/

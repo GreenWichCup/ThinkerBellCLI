@@ -37,7 +37,7 @@ export const ProductCartComponent = ({
           </SectionBottom>
         </SectionRight>
         <Spacer position="right" size="large" />
-        <BuyButton icon="cancel" mode="contained" />
+        <BuyButton onPress={onPress} icon="cancel" mode="contained">Remove</BuyButton>
       </Info>
     </ThinkShopCard>
   );

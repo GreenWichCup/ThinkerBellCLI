@@ -71,7 +71,7 @@ export const ProfileScreen = ({ route, navigation }) => {
   const userAuthState = useSelector(userStateValue);
   const dispatch = useDispatch();
   // const list = useSelector(loadUserList);
-  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState("");
 
   const handleMenuChoice = (itemTitle) => {
     switch (itemTitle) {
@@ -130,7 +130,7 @@ export const ProfileScreen = ({ route, navigation }) => {
           }}
         >
           <Spacer position="top" size="large" />
-          {profilePhoto === null ? (
+          {profilePhoto === "" ? (
             <View
               style={styles.profilePhoto}
             >
@@ -153,13 +153,13 @@ export const ProfileScreen = ({ route, navigation }) => {
             <IconThink
               source={require("../../../../assets/images/ic_total_sent_VERT.png")}
             />
-            <Amount>200</Amount>
+            <Amount>{userAuthState.currentUser.thinkSent}</Amount>
           </ThinkCounter>
           <ThinkCounter>
             <IconThink
               source={require("../../../../assets/images/ic_total_received_VERT.png")}
             />
-            <Amount>200</Amount>
+            <Amount>{userAuthState.currentUser.thinkReceived}</Amount>
           </ThinkCounter>
         </ProfileInfo>
       </AvatarContainer>

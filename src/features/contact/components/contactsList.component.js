@@ -1,9 +1,8 @@
 import React, { useCallback, useState, useEffect, useMemo, useContext } from "react";
-import messaging from "@react-native-firebase/messaging";
 import { Searchbar, Colors, Text } from "react-native-paper";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-
+import { userStateValue } from "../../../redux/store/slices/authSlice";
 import {
   loadAllContacts,
   getContactsStatus,
@@ -30,25 +29,26 @@ import {
 } from "./contact-components.styles";
 import { List } from "./contact-components.styles";
 import { notificationChannel } from "../../../services/notifications/notifications.service";
-
+import { sentThinkCounter } from "../../../redux/actions/productList";
 import { FavouriteBar } from "../../../components/favourites/favourite-bar-component";
 import { FavouritesContext } from "../../../services/favourites/favourites-context";
 import { Spacer } from "../../../components/spacer/spacer-component";
-import { exists } from "react-native-fs";
+import { saveProductToDb, updateProduct } from "../../../redux/actions/productList";
+import { ThinkShopContext } from "../../../services/thinkShop/think-shop-context";
 
 export const ContactList = ({ navigation }) => {
   const notifIcon = require("../../../../assets/images/send_btn.png");
   const dispatch = useDispatch();
+  const userDataState = useSelector(userStateValue)
   const contacts = useSelector(loadAllContacts);
   const contactsStatus = useSelector(getContactsStatus);
   const error = useSelector(getContactsError);
   const userProducts = useSelector(loadUserProductList);
-  const userList = useSelector(loadUserList);
 
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isToggled, setIsToggled] = useState(false);
   const { favourites } = useContext(FavouritesContext);
-
+  const { getProductFromFirestore } = useContext(ThinkShopContext);
 
   const filteredContact = useMemo(() => {
     return Array.from(
@@ -64,41 +64,71 @@ export const ContactList = ({ navigation }) => {
     if (contactsStatus === "idle") {
       dispatch(fetchContacts());
       dispatch(fetchUserProductList());
-      dispatch(fetchUserList());
     }
   }, [dispatch, contactsStatus]);
 
-  //iOS only
-  /* const handleSendNotification = () => {
-     requestNotificationsPermission()
-   }*/
+  const sendSingleDeviceNotification = async (channel_id, token, name) => {
 
-  const userTokenChecker = async (contactItem) => {
-    let userTok = "";
-    const results = userList.filter((u) => {
-      (u.userPhone.slice(u.userPhone.length - 9)) === contactItem.phoneNumbers;
-    })
-    console.log("userList filter :", results);
-  }
+    await notificationChannel(channel_id);
+
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append(
+      'Authorization',
+      'Bearer AAAAZlqUaak:APA91bFV4p94jvFVLBLMALFqBEoT5ppxCq3QEU4lKycbnhyM55nJqQWclcHxgFcm0G1ixzbeSfiCW6e6F7MIi4kj6HSWaaqPAwoZeRsN7NoRC7fABIhulVLjchd2pjHy3emJzRyp0GAZ',
+    );
+
+    var raw = JSON.stringify({
+      to: token,
+      data: {
+        channelId: channel_id,
+        soundName: "mpd",
+        senderId: userDataState.currentUser.userId,
+        senderName: userDataState.currentUser.userName
+
+      },
+      content_available: true,
+      priority: 'high',
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+    //contact Id or token as channel Id, 
+    await fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
+      .then(response => console.log('response :', response.text()))
+      .then(result => console.log('result :', result))
+      .then(() => {
+        dispatch(updateThinkAmout());
+      })
+      .then(() => {
+        updateProduct(userProducts);
+      })
+      .catch(error => console.log('error returning new state of product list', error));
+    try {
+      await sentThinkCounter(channel_id, name);
+
+    } catch (error) {
+      console.log("error sotre notification sender :", error)
+    }
+  };
 
   const renderItems = ({ item, index }) => {
-    let matchPhone = true;
-    let token = "";
-    userList.forEach((u) => {
-      const nineDigitsNumber = u.userPhone.slice(u.userPhone.length - 9);
-      if (nineDigitsNumber === item.phoneNumbers)
-        matchPhone = false;
-      token = u.token[u.token.length - 1];
-    }
-    );
+
     return (
       <ContactCardItem
-        exists={matchPhone}
+        exists={!item.exists}
         key={item.recordID}
+        token={item.token}
         contactInfo={item}
-        sendNotification={() => { sendSingleDeviceNotification("001", "bell_1") }}
+        sendNotification={() => {
+          sendSingleDeviceNotification(item.userId, item.token, item.displayName)
+        }}
         onPress={() => {
-          console.log("contacts :", contacts)
+          console.log("user :", userDataState)
         }}
       />
     );
@@ -106,7 +136,6 @@ export const ContactList = ({ navigation }) => {
 
   useEffect(() => {
     contactScreenCallback();
-    console.log("usersList :", userList);
   }, [contactScreenCallback]);
 
   return (
@@ -118,7 +147,6 @@ export const ContactList = ({ navigation }) => {
           icon={isToggled ? "heart" : "heart-outline"}
           onIconPress={() => {
             setIsToggled(!isToggled);
-            console.log("favourites list: ", favourites);
           }}
           onChangeText={(text) => {
             setSearchKeyword(text);
@@ -151,6 +179,7 @@ export const ContactList = ({ navigation }) => {
           <Text>ERROR IS {error}</Text>
         </View>
       )}
+
     </View>
   );
 };

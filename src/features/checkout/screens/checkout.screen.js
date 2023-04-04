@@ -30,11 +30,10 @@ export const CheckoutScreen = ({ navigation }) => {
   const { cart, thinkShop, removeItem, sum, clearCart } =
     useContext(CartContext);
   const dispatch = useDispatch();
-  const userProducts = useSelector(loadUserProductList);
+  //const userProducts = useSelector(loadUserProductList);
 
   const handleSaveProduct = async () => {
-
-    await saveProductToDb(cart, userProducts)
+    await saveProductToDb(cart)
       .then(() => {
         dispatch(fetchUserProductList());
       })
@@ -91,11 +90,11 @@ export const CheckoutScreen = ({ navigation }) => {
 
         <Spacer position="top" size="large" />
         <CreditCardComponent savePurchase={handleSaveProduct} />
-        <Spacer position="top" size="large">
-          <ClearButton icon="cart-off" mode="contained" onPress={clearCart}>
-            Clear cart
-          </ClearButton>
-        </Spacer>
+        <Spacer position="top" size="large" />
+        <ClearButton icon="cart-off" mode="contained" onPress={clearCart}>
+          Clear cart
+        </ClearButton>
+        <Spacer position="bottom" size="large" />
       </ScrollView>
     </SafeArea>
   );

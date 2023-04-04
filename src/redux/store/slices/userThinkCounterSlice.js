@@ -12,44 +12,44 @@ const initialState = {
 
 export const fetchUserProductList = createAsyncThunk(
   "userProductList/fetchUserProductList",
-  async (id) => {
+  async () => {
     const array = [];
     try {
       await firestore()
-        .collection("users_purchases")
+        .collection("users")
         .doc(auth().currentUser.uid)
+        .collection("active_product")
+        .where('active', '==', true)
         .get()
         .then((querySnapshot) => {
-          if (querySnapshot.exists) {
-            const userData = querySnapshot.data();
-            userData.product_list.forEach((element) => {
-              array.push(element);
-            });
-          } else {
-            console.log("nothing returned");
-          }
+          querySnapshot.forEach((ds) => {
+            const productData = ds.data();
+            if (productData.active === true) {
+              array.push(productData);
+            }
+          })
         });
     } catch (error) {
-      console.log("error fetching:", error);
+      console.log("error fetching products firestore:", error);
     }
     return array;
   }
 );
 
-export const updateUserProductList = createAsyncThunk(
+/*export const updateUserProductList = createAsyncThunk(
   "userProductList/updateUserProductList",
-  async (id) => {
+  async (payload) => {
     try {
       await firestore()
         .collection("users_purchases")
         .doc(auth().currentUser.uid)
-        .get();
+        .update({ product_list: payload });
       //do something to update the data
     } catch (error) {
       console.log("error fetching:", error);
     }
   }
-);
+);*/
 
 const userProductListSlice = createSlice({
   name: "userProductList",
@@ -80,15 +80,34 @@ const userProductListSlice = createSlice({
       },
     },
     updateThinkAmout: {
-      reducer(state, action) {
-        state.userProductList.forEach((p) => {
-          if (p.product_name === action.payload) {
-            p.available_think -= 1;
-            p.used_think += 1;
+      reducer(state) {
+        for (let index = 0; index < state.userProductList.length; index++) {
+          let element = state.userProductList[index];
+          if (element.available_think - 1 > 0) {
+            element.available_think -= 1;
+            element.used_think += 1;
+            console.log("product updated", element);
+            return;
+
+          } else if (element.available_think === "unlimited") {
+            element.used_think += 1;
+            console.log("product updated", element);
+            return;
+
+          } else if (element.available_think - 1 == 0) {
+            element.available_think -= 1;
+            element.used_think += 1;
+            element.active = false;
+            console.log("product updated", element);
+            return;
           }
-        })
+        }
+        console.log("state.productList updating... :", state.userProductList);
+
+
       }
     }
+
   },
   extraReducers(builder) {
     builder
@@ -117,6 +136,20 @@ const userProductListSlice = createSlice({
       });
   },
 });
+
+export const updateUserProduct = async (payload) => {
+  await firestore().collection("users_purchases").doc(userDataState.currentUser.userId).get()
+  try {
+    await firestore().collection("users_purchases").doc(userDataState.currentUser.userId).update({
+      product_list: payload
+    });
+    console.log("userDataState", userDataState);
+  } catch (error) {
+    console.log("error write db data:", error);
+  }
+};
+
+
 
 export const loadUserProductList = (state) => state.userProductList.userProductList;
 export const getUserProductListStatus = (state) => state.userProductList.status;

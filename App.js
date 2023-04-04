@@ -6,7 +6,7 @@ import auth from "@react-native-firebase/auth";
 import { ThemeProvider } from 'styled-components';
 import { theme } from './src/infrastructure/theme';
 import { Navigation } from "./src/infrastructure/navigation";
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import { requestNotificationsPermission } from './src/services/notifications/notifications.service';
 import SplashScreen from 'react-native-splash-screen';

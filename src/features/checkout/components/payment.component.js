@@ -10,6 +10,7 @@ import {
 import { FormProvider, useForm } from 'react-hook-form'
 import LottieView from 'lottie-react-native'
 import CreditCardForm from 'rn-credit-card'
+import { PayButton } from "./checkout-styles";
 
 export const CreditCardComponent = ({ savePurchase }) => {
   const formMethods = useForm({
@@ -42,7 +43,7 @@ export const CreditCardComponent = ({ savePurchase }) => {
   };
   return (
     <FormProvider {...formMethods}>
-      <SafeAreaView >
+      <SafeAreaView style={{ marginLeft: 4, marginRight: 4 }} >
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <CreditCardForm
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
   button: {
     margin: 8,
     marginTop: 0,
+    color: "green"
   },
 
 })
