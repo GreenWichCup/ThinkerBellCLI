@@ -2,7 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBztfnDp3gkiltFu87eBsFbJ_7bQJMWObk",
+  apiKey: "My-API-Key",
   authDomain: "tatthood-ee0f3.firebaseapp.com",
   databaseURL: "https://tatthood-ee0f3-default-rtdb.firebaseio.com",
   projectId: "tatthood-ee0f3",
